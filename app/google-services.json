@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "31460352059",
+    "firebase_url": "https://eztryclothes-3b490.firebaseio.com",
+    "project_id": "eztryclothes-3b490",
+    "storage_bucket": "eztryclothes-3b490.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:31460352059:android:f512830e53e8232a0f7c1e",
+        "android_client_info": {
+          "package_name": "com.ngtszlong.eztrycloth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "31460352059-rpcj6gfdnm4r0sbnva09006en2eb3hbq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ngtszlong.eztrycloth",
+            "certificate_hash": "657210165fac40e5e03846a1580cfe79df1626c6"
+          }
+        },
+        {
+          "client_id": "31460352059-embe7vsgvtgah0quf1aojbsgfoguekum.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnBOmfKdJEEwwKUO7kPg4efawDW-SXH-8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "31460352059-embe7vsgvtgah0quf1aojbsgfoguekum.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

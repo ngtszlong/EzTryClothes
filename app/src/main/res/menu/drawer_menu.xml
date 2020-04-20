@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_menu"
+            android:icon="@drawable/ic_menu"
+            android:title="Main menu" />
+        <item
+            android:id="@+id/nav_straighten"
+            android:icon="@drawable/ic_straighten"
+            android:title="Measuring" />
+        <item
+            android:id="@+id/nav_wish"
+            android:icon="@drawable/ic_wishlist"
+            android:title="WishList" />
+        <item
+            android:id="@+id/nav_shoppingCart"
+            android:icon="@drawable/ic_shopping_cart"
+            android:title="Shopping Cart" />
+    </group>
+    <item android:title="Help">
+        <menu>
+            <item
+                android:id="@+id/nav_profile"
+                android:icon="@drawable/ic_help"
+                android:title="Profile" />
+            <item
+                android:id="@+id/nav_setting"
+                android:icon="@drawable/ic_settings"
+                android:title="Setting" />
+        </menu>
+    </item>
+</menu>

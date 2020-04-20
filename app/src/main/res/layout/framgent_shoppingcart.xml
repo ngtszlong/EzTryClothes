@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_shopcart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="80dp">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|center"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="10dp">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_sc_shopcart"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:cardBackgroundColor="@color/colorroyalblue"
+            app:cardCornerRadius="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Add To Shopping Cart"
+                android:textColor="#FFFFFF" />
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+
+</RelativeLayout>
