@@ -2,6 +2,7 @@ package com.ngtszlong.eztrycloth.setting.register;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 
 import android.app.ProgressDialog;
@@ -20,7 +21,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.ngtszlong.eztrycloth.MainActivity;
-import com.ngtszlong.eztrycloth.MeasureFragment;
 import com.ngtszlong.eztrycloth.R;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -28,11 +28,16 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth fAuth;
     ProgressDialog progressDialog;
     Profile profile;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        toolbar = findViewById(R.id.tb_register);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Register");
 
         fAuth = FirebaseAuth.getInstance();
 
@@ -82,6 +87,8 @@ public class RegisterActivity extends AppCompatActivity {
                                 profile.setBirth("");
                                 profile.setAddress("");
                                 profile.setPhone("");
+                                profile.setFront("");
+                                profile.setSide("");
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 DatabaseReference reference = database.getReference("Users");
                                 reference.child(uid).setValue(profile);
@@ -97,5 +104,11 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return super.onSupportNavigateUp();
     }
 }

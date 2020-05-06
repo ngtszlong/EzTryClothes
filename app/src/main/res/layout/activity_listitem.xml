@@ -4,11 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:padding="8dp"
+    android:orientation="vertical"
     tools:context=".menu.list.ListItemActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tb_listitem"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_marginBottom="20dp"
+        android:background="@color/main"
+        android:minHeight="?attr/actionBarSize" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_itemlist"
+        android:padding="8dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

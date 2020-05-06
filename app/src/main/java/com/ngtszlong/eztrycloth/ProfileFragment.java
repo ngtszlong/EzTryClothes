@@ -3,6 +3,7 @@ package com.ngtszlong.eztrycloth;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -38,6 +39,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.ngtszlong.eztrycloth.setting.register.Profile;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -49,6 +51,8 @@ public class ProfileFragment extends Fragment {
     private static final String TAG = "ProfileFragment";
 
     private ImageView img_proimage;
+    private ImageView img_front;
+    private ImageView img_side;
     private TextView txt_male;
     private TextView txt_female;
     private EditText edt_name;
@@ -63,7 +67,10 @@ public class ProfileFragment extends Fragment {
     private DatabaseReference databaseReference;
     private static ArrayList<Profile> profileArrayList;
     private DatePickerDialog.OnDateSetListener dateSetListener;
-    private String gender;
+    String gender;
+    String action;
+    String front;
+    String side;
 
     private int TAKE_IMAGE_CODE = 10001;
 
@@ -73,6 +80,8 @@ public class ProfileFragment extends Fragment {
         getActivity().setTitle("Profile");
         final View view = inflater.inflate(R.layout.framgent_profile, container, false);
         img_proimage = view.findViewById(R.id.img_mpro_image);
+        img_front = view.findViewById(R.id.img_mpro_front);
+        img_side = view.findViewById(R.id.img_mpro_side);
         txt_male = view.findViewById(R.id.txt_mpro_male);
         txt_female = view.findViewById(R.id.txt_mpro_female);
         edt_name = view.findViewById(R.id.edt_mpro_name);
@@ -106,6 +115,26 @@ public class ProfileFragment extends Fragment {
                 txt_birth.setText(date);
             }
         };
+        img_proimage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleImageClick(v);
+            }
+        });
+
+        img_front.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handlefrontclick(v);
+            }
+        });
+
+        img_side.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handlesideclick(v);
+            }
+        });
 
         txt_birth.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,12 +147,6 @@ public class ProfileFragment extends Fragment {
                 DatePickerDialog dialog = new DatePickerDialog(getActivity(), R.style.Theme_AppCompat_Dialog_MinWidth, dateSetListener, year, mouth, day);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
-            }
-        });
-        img_proimage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleImageClick(view);
             }
         });
         return view;
@@ -147,6 +170,8 @@ public class ProfileFragment extends Fragment {
                         profile.setHeight(edt_height.getText().toString());
                         profile.setBirth(txt_birth.getText().toString());
                         profile.setAddress(edt_address.getText().toString());
+                        profile.setFront(front);
+                        profile.setSide(side);
                         databaseReference.child(profile.getUid()).setValue(profile);
                     }
                 }
@@ -190,6 +215,10 @@ public class ProfileFragment extends Fragment {
                         edt_height.setText(profile.getHeight());
                         txt_birth.setText(profile.getBirth());
                         edt_address.setText(profile.getAddress());
+                        Picasso.get().load(profile.getFront()).into(img_front);
+                        Picasso.get().load(profile.getSide()).into(img_side);
+                        front = profile.getFront();
+                        side = profile.getSide();
                     }
                 }
             }
@@ -203,6 +232,23 @@ public class ProfileFragment extends Fragment {
 
     public void handleImageClick(View view) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        action = "profileImages";
+        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(intent, TAKE_IMAGE_CODE);
+        }
+    }
+
+    public void handlefrontclick(View view) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        action = "front";
+        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(intent, TAKE_IMAGE_CODE);
+        }
+    }
+
+    public void handlesideclick(View view) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        action = "side";
         if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivityForResult(intent, TAKE_IMAGE_CODE);
         }
@@ -215,7 +261,9 @@ public class ProfileFragment extends Fragment {
             switch (resultCode) {
                 case RESULT_OK:
                     Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                    img_proimage.setImageBitmap(bitmap);
+                    if (action.equals("profileImages")) {
+                        img_proimage.setImageBitmap(bitmap);
+                    }
                     handleUpload(bitmap);
             }
         }
@@ -251,7 +299,15 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onSuccess(Uri uri) {
                 Log.d(TAG, "onSuccess: " + uri);
-                setUserProfileUrl(uri);
+                if (action.equals("profileImages")) {
+                    setUserProfileUrl(uri);
+                } else {
+                    if (action.equals("front")){
+                        front = uri.toString();
+                    }else if (action.equals("side")){
+                        side = uri.toString();
+                    }
+                }
             }
         });
     }

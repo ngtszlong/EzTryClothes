@@ -10,11 +10,13 @@ public class Profile {
     private String birth;
     private String address;
     private String phone;
+    private String front;
+    private String side;
 
     public Profile() {
     }
 
-    public Profile(String email, String uid, String name, String gender, String age, String height, String birth, String address, String phone) {
+    public Profile(String email, String uid, String name, String gender, String age, String height, String birth, String address, String phone, String front, String side) {
         this.email = email;
         this.uid = uid;
         this.name = name;
@@ -24,6 +26,8 @@ public class Profile {
         this.birth = birth;
         this.address = address;
         this.phone = phone;
+        this.front = front;
+        this.side = side;
     }
 
     public String getPhone() {
@@ -96,5 +100,21 @@ public class Profile {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getFront() {
+        return front;
+    }
+
+    public void setFront(String front) {
+        this.front = front;
+    }
+
+    public String getSide() {
+        return side;
+    }
+
+    public void setSide(String side) {
+        this.side = side;
     }
 }

@@ -66,7 +66,8 @@
             android:layout_gravity="center"
             android:layout_marginBottom="25dp"
             app:cardBackgroundColor="@color/colorAccent"
-            app:cardCornerRadius="25dp">
+            app:cardCornerRadius="25dp"
+            android:onClick="handlefrontclick">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -89,7 +90,8 @@
             android:layout_gravity="center"
             android:layout_marginBottom="25dp"
             app:cardBackgroundColor="@color/colorAccent"
-            app:cardCornerRadius="25dp">
+            app:cardCornerRadius="25dp"
+            android:onClick="handlesideclick">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -104,7 +106,6 @@
                     android:textSize="18sp" />
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
-
 
         <EditText
             android:id="@+id/edt_pro_name"

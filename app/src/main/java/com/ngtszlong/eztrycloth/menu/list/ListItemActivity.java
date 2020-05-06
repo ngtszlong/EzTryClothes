@@ -3,6 +3,7 @@ package com.ngtszlong.eztrycloth.menu.list;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,18 +33,21 @@ public class ListItemActivity extends AppCompatActivity implements ListAdapter.O
     public static ArrayList<ListItem> listItems;
     String type;
 
+    Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listitem);
 
-        ActionBar actionBar;
-        actionBar = getSupportActionBar();
-        ColorDrawable colorDrawable = new ColorDrawable(getResources().getColor(R.color.main));
-        actionBar.setBackgroundDrawable(colorDrawable);
-
         Intent intent = getIntent();
         type = intent.getStringExtra("clothtype");
+
+        toolbar = findViewById(R.id.tb_listitem);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(type);
+
         recyclerView = findViewById(R.id.rv_itemlist);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
@@ -78,5 +82,11 @@ public class ListItemActivity extends AppCompatActivity implements ListAdapter.O
         Intent intent = new Intent(ListItemActivity.this, DetailActivity.class);
         intent.putExtra("No", listItem.getNo());
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return super.onSupportNavigateUp();
     }
 }

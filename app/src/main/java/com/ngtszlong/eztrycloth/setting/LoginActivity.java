@@ -2,6 +2,7 @@ package com.ngtszlong.eztrycloth.setting;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 
 import android.app.ProgressDialog;
@@ -21,14 +22,19 @@ import com.ngtszlong.eztrycloth.MeasureFragment;
 import com.ngtszlong.eztrycloth.R;
 
 public class LoginActivity extends AppCompatActivity {
-
     private FirebaseAuth fAuth;
     ProgressDialog progressDialog;
+
+    Toolbar tb_login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        tb_login = findViewById(R.id.tb_login);
+        setSupportActionBar(tb_login);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Login");
 
         fAuth = FirebaseAuth.getInstance();
 
@@ -73,5 +79,11 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return super.onSupportNavigateUp();
     }
 }

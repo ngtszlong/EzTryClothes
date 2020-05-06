@@ -20,9 +20,8 @@
         <activity android:name=".ChangePwActivity" />
         <activity android:name=".setting.register.EnterProfileActivity" />
         <activity
-            android:name=".setting.register.TakePhotoActivity"
+            android:name=".menu.list.ListItemActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".menu.list.ListItemActivity" />
         <activity android:name=".menu.detail.DetailActivity" />
         <activity
             android:name=".setting.register.RegisterActivity"

@@ -56,9 +56,9 @@ public class EnterProfileActivity extends AppCompatActivity {
     EditText edt_address;
     CardView btn_submit;
     EditText edt_phone;
+    ImageView img_addimage;
     CardView btn_img_front;
     CardView btn_img_side;
-    ImageView img_addimage;
     DatePickerDialog.OnDateSetListener dateSetListener;
 
     FirebaseDatabase firebaseDatabase;
@@ -70,6 +70,9 @@ public class EnterProfileActivity extends AppCompatActivity {
     String gender;
 
     int TAKE_IMAGE_CODE = 10001;
+    String action;
+    String front;
+    String side;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +87,9 @@ public class EnterProfileActivity extends AppCompatActivity {
         edt_address = findViewById(R.id.edt_pro_address);
         edt_phone = findViewById(R.id.edt_pro_phone);
         btn_submit = findViewById(R.id.btn_submit);
+        img_addimage = findViewById(R.id.img_addimage);
         btn_img_front = findViewById(R.id.btn_img_front);
         btn_img_side = findViewById(R.id.btn_img_side);
-        img_addimage = findViewById(R.id.img_addimage);
 
         ckb_male.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,24 +125,6 @@ public class EnterProfileActivity extends AppCompatActivity {
             }
         });
 
-        btn_img_front.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EnterProfileActivity.this, TakePhotoActivity.class);
-                intent.putExtra("position", "Front");
-                startActivity(intent);
-            }
-        });
-
-        btn_img_side.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EnterProfileActivity.this, TakePhotoActivity.class);
-                intent.putExtra("position", "Side");
-                startActivity(intent);
-            }
-        });
-
         dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -153,6 +138,23 @@ public class EnterProfileActivity extends AppCompatActivity {
 
     public void handleImageClick(View view) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        action = "profileImages";
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, TAKE_IMAGE_CODE);
+        }
+    }
+
+    public void handlefrontclick(View view) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        action = "front";
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, TAKE_IMAGE_CODE);
+        }
+    }
+
+    public void handlesideclick(View view) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        action = "side";
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, TAKE_IMAGE_CODE);
         }
@@ -165,7 +167,9 @@ public class EnterProfileActivity extends AppCompatActivity {
             switch (resultCode) {
                 case RESULT_OK:
                     Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                    img_addimage.setImageBitmap(bitmap);
+                    if (action.equals("profileImages")) {
+                        img_addimage.setImageBitmap(bitmap);
+                    }
                     handleUpload(bitmap);
             }
         }
@@ -178,7 +182,7 @@ public class EnterProfileActivity extends AppCompatActivity {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://eztryclothes-3b490.appspot.com");
         final StorageReference reference = storageReference
-                .child("profileImages")
+                .child(action)
                 .child(uid + ".jpeg");
 
         reference.putBytes(baos.toByteArray())
@@ -201,15 +205,23 @@ public class EnterProfileActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Uri uri) {
                 Log.d(TAG, "onSuccess: " + uri);
-                setUserProfileUrl(uri);
+                if (action.equals("profileImages")) {
+                    setUserProfileUrl(uri);
+                } else {
+                    if (action.equals("front")){
+                        front = uri.toString();
+                    }else if (action.equals("side")){
+                        side = uri.toString();
+                    }
+                }
             }
         });
     }
 
-    private void setUserProfileUrl(Uri url) {
+    private void setUserProfileUrl(Uri uri) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         UserProfileChangeRequest request = new UserProfileChangeRequest.Builder()
-                .setPhotoUri(url)
+                .setPhotoUri(uri)
                 .build();
 
         user.updateProfile(request)
@@ -252,6 +264,8 @@ public class EnterProfileActivity extends AppCompatActivity {
                                 profile.setHeight(edt_height.getText().toString());
                                 profile.setBirth(txt_birth.getText().toString());
                                 profile.setAddress(edt_address.getText().toString());
+                                profile.setFront(front);
+                                profile.setSide(side);
                                 databaseReference.child(profile.getUid()).setValue(profile);
                             }
                         }

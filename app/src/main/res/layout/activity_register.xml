@@ -7,13 +7,21 @@
     android:background="@drawable/gradient"
     tools:context=".setting.register.RegisterActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tb_register"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_marginBottom="20dp"
+        android:background="@color/main"
+        android:minHeight="?attr/actionBarSize"/>
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="120dp"
         android:layout_height="150dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="70dp"
         android:src="@drawable/ic_help" />
 
     <EditText
