@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,6 +34,8 @@ public class WishListFragment extends Fragment implements WishlistAdapter.OnItem
     private WishlistAdapter wishlistAdapter;
     private FirebaseAuth fAuth;
     private FirebaseUser user;
+
+    CardView cv_tryclothes;
 
     @Nullable
     @Override

@@ -117,30 +117,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MenuFragment()).commit();
                 break;
             case R.id.nav_straighten:
-                if (firebaseAuth.getCurrentUser() == null){
+                if (firebaseAuth.getCurrentUser() == null) {
                     Toast.makeText(this, "You need to login first", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MeasureFragment()).commit();
                 }
                 break;
-            case R.id.nav_wish:
-                if (firebaseAuth.getCurrentUser() == null){
+            case R.id.nav_fitting:
+                if (firebaseAuth.getCurrentUser() == null) {
                     Toast.makeText(this, "You need to login first", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FittingRoomFragment()).commit();
+                }
+                break;
+            case R.id.nav_wish:
+                if (firebaseAuth.getCurrentUser() == null) {
+                    Toast.makeText(this, "You need to login first", Toast.LENGTH_SHORT).show();
+                } else {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WishListFragment()).commit();
                 }
                 break;
             case R.id.nav_shoppingCart:
-                if (firebaseAuth.getCurrentUser() == null){
+                if (firebaseAuth.getCurrentUser() == null) {
                     Toast.makeText(this, "You need to login first", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ShoppingCartFragment()).commit();
                 }
                 break;
             case R.id.nav_profile:
-                if (firebaseAuth.getCurrentUser() == null){
+                if (firebaseAuth.getCurrentUser() == null) {
                     Toast.makeText(this, "You need to login first", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
                 }
                 break;

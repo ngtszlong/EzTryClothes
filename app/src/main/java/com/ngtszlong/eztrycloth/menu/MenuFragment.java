@@ -34,6 +34,7 @@ public class MenuFragment extends Fragment implements MenuAdapter.OnItemClickLis
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getActivity().setTitle("Please choose Clothes Type");
         View view = inflater.inflate(R.layout.framgent_menu, container, false);
         recyclerView = view.findViewById(R.id.rv_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

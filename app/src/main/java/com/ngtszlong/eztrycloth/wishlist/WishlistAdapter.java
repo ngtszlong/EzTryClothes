@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ngtszlong.eztrycloth.FittingRoomFragment;
 import com.ngtszlong.eztrycloth.R;
 import com.squareup.picasso.Picasso;
 
@@ -53,6 +54,10 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
     }
 
     public void setOnItemClickListener(WishListFragment listener) {
+        onItemClickListener = listener;
+    }
+
+    public void setOnItemClickListener(FittingRoomFragment listener) {
         onItemClickListener = listener;
     }
 

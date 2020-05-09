@@ -9,6 +9,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -276,7 +281,7 @@ public class ProfileFragment extends Fragment {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://eztryclothes-3b490.appspot.com");
         final StorageReference reference = storageReference
-                .child("profileImages")
+                .child(action)
                 .child(uid + ".jpeg");
 
         reference.putBytes(baos.toByteArray())

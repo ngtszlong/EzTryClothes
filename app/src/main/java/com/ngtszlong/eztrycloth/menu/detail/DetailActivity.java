@@ -3,6 +3,7 @@ package com.ngtszlong.eztrycloth.menu.detail;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
@@ -53,19 +54,19 @@ public class DetailActivity extends AppCompatActivity {
     String price;
     String image;
 
+    Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        ActionBar actionBar;
-        actionBar = getSupportActionBar();
-        ColorDrawable colorDrawable = new ColorDrawable(getResources().getColor(R.color.main));
-        actionBar.setBackgroundDrawable(colorDrawable);
+        toolbar = findViewById(R.id.tb_detail);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         cv_wishlist = findViewById(R.id.cv_wishlist);
         cv_shopcart = findViewById(R.id.cv_shopcart);
-        cv_try = findViewById(R.id.cv_try);
 
         Intent intent = getIntent();
         No = intent.getStringExtra("No");
@@ -131,14 +132,6 @@ public class DetailActivity extends AppCompatActivity {
                 Toast.makeText(DetailActivity.this, "Added to Shopping Cart", Toast.LENGTH_SHORT).show();
             }
         });
-
-        cv_try.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
     }
 
     public void getcurrenttime() {
@@ -164,6 +157,7 @@ public class DetailActivity extends AppCompatActivity {
         quantity.setText(l.getQuantity());
         description.setText(l.getDescription_Eng());
         material.setText(l.getMaterial_Eng());
+        getSupportActionBar().setTitle(l.getName_Eng());
     }
 
     public void setfirebasedata(ListItem l) {
@@ -172,5 +166,11 @@ public class DetailActivity extends AppCompatActivity {
         gender = l.getGender();
         price = l.getPrice();
         image = l.getImage();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return super.onSupportNavigateUp();
     }
 }
