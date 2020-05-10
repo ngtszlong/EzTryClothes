@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,6 +34,13 @@ public class MenuFragment extends Fragment implements MenuAdapter.OnItemClickLis
     private MenuAdapter menuAdapter;
     public static ArrayList<MenuItem> menuItems;
 
+    RadioButton rb_all;
+    RadioButton rb_men;
+    RadioButton rb_women;
+    RadioGroup rg_type;
+
+    String[] type;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -38,17 +48,64 @@ public class MenuFragment extends Fragment implements MenuAdapter.OnItemClickLis
         View view = inflater.inflate(R.layout.framgent_menu, container, false);
         recyclerView = view.findViewById(R.id.rv_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        menuItems = new ArrayList<>();
-        menuItems.add(new MenuItem("jacket", R.drawable.jacket));
-        menuItems.add(new MenuItem("HOODIE ", R.drawable.hoodies));
-        menuItems.add(new MenuItem("Shirt", R.drawable.shirt));
-        menuItems.add(new MenuItem("PANTS", R.drawable.pants));
-        menuItems.add(new MenuItem("Polo", R.drawable.polo));
 
+        menuItems = new ArrayList<>();
+        rb_all = view.findViewById(R.id.rb_all);
+        rb_men = view.findViewById(R.id.rb_men);
+        rb_women = view.findViewById(R.id.rb_women);
+        rg_type = view.findViewById(R.id.rg_type);
+
+        type = getResources().getStringArray(R.array.type);
+        for (int i = 0; i< type.length; i++){
+            menuItems.add(new MenuItem(type[i], R.drawable.noimage));
+        }
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         menuAdapter = new MenuAdapter(getActivity(), menuItems);
         recyclerView.setAdapter(menuAdapter);
         menuAdapter.setOnItemClickListener(MenuFragment.this);
+
+
+        rg_type.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (rb_all.getId() == checkedId){
+                    menuItems.clear();
+                    type = getResources().getStringArray(R.array.type);
+                    for (int i = 0; i< type.length; i++){
+                        menuItems.add(new MenuItem(type[i], R.drawable.noimage));
+                    }
+                    recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+                    menuAdapter = new MenuAdapter(getActivity(), menuItems);
+                    recyclerView.setAdapter(menuAdapter);
+                    menuAdapter.setOnItemClickListener(MenuFragment.this);
+                }else if (rb_men.getId() == checkedId){
+                    menuItems.clear();
+                    type = getResources().getStringArray(R.array.men);
+                    for (int i = 0; i< type.length; i++){
+                        menuItems.add(new MenuItem(type[i], R.drawable.noimage));
+                    }
+                    recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+                    menuAdapter = new MenuAdapter(getActivity(), menuItems);
+                    recyclerView.setAdapter(menuAdapter);
+                    menuAdapter.setOnItemClickListener(MenuFragment.this);
+                }else if (rb_women.getId() == checkedId){
+                    menuItems.clear();
+                    type = getResources().getStringArray(R.array.women);
+                    for (int i = 0; i< type.length; i++){
+                        menuItems.add(new MenuItem(type[i], R.drawable.noimage));
+                    }
+                    recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+                    menuAdapter = new MenuAdapter(getActivity(), menuItems);
+                    recyclerView.setAdapter(menuAdapter);
+                    menuAdapter.setOnItemClickListener(MenuFragment.this);
+                }
+            }
+        });
+        /*menuItems.add(new MenuItem("jacket", R.drawable.jacket));
+        menuItems.add(new MenuItem("HOODIE ", R.drawable.hoodies));
+        menuItems.add(new MenuItem("Shirt", R.drawable.shirt));
+        menuItems.add(new MenuItem("PANTS", R.drawable.pants));
+        menuItems.add(new MenuItem("Polo", R.drawable.polo));*/
         return view;
     }
 

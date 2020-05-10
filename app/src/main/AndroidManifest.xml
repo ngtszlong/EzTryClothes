@@ -21,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="q">
-        <activity android:name=".ChangePwActivity" />
+        <activity android:name=".setting.ChangePwActivity" />
         <activity android:name=".setting.register.EnterProfileActivity" />
         <activity
             android:name=".menu.list.ListItemActivity"

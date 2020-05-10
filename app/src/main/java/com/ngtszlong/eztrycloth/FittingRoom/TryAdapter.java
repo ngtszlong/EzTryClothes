@@ -1,4 +1,4 @@
-package com.ngtszlong.eztrycloth;
+package com.ngtszlong.eztrycloth.FittingRoom;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,7 +9,9 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ngtszlong.eztrycloth.R;
 import com.ngtszlong.eztrycloth.wishlist.Wishlist;
+import com.ngtszlong.eztrycloth.wishlist.WishlistAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 public class TryAdapter extends RecyclerView.Adapter<TryAdapter.ViewHolder> {
     private Context context;
     private ArrayList<Wishlist> wishlistArrayList;
+    private TryAdapter.OnItemClickListener onItemClickListener;
 
     public TryAdapter(Context context, ArrayList<Wishlist> wishlistArrayList) {
         this.context = context;
@@ -36,6 +39,14 @@ public class TryAdapter extends RecyclerView.Adapter<TryAdapter.ViewHolder> {
         Picasso.get().load(wishlist.getImage()).into(holder.imageView);
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(FittingRoomFragment listener) {
+        onItemClickListener = listener;
+    }
+
     @Override
     public int getItemCount() {
         return wishlistArrayList.size();
@@ -47,6 +58,17 @@ public class TryAdapter extends RecyclerView.Adapter<TryAdapter.ViewHolder> {
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.img_body);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onItemClickListener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            onItemClickListener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 }

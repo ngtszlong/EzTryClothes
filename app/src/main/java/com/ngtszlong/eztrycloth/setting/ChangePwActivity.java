@@ -1,8 +1,10 @@
-package com.ngtszlong.eztrycloth;
+package com.ngtszlong.eztrycloth.setting;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.ngtszlong.eztrycloth.R;
 
 public class ChangePwActivity extends AppCompatActivity {
 

@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.ngtszlong.eztrycloth.MainActivity;
-import com.ngtszlong.eztrycloth.MeasureFragment;
 import com.ngtszlong.eztrycloth.R;
 import com.ngtszlong.eztrycloth.setting.register.RegisterActivity;
 

@@ -26,6 +26,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
+import com.ngtszlong.eztrycloth.FittingRoom.FittingRoomFragment;
+import com.ngtszlong.eztrycloth.Measure.MeasureFragment;
+import com.ngtszlong.eztrycloth.Profile.ProfileFragment;
 import com.ngtszlong.eztrycloth.menu.MenuFragment;
 import com.ngtszlong.eztrycloth.setting.SettingFragment;
 import com.ngtszlong.eztrycloth.setting.register.Profile;
@@ -118,35 +121,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_straighten:
                 if (firebaseAuth.getCurrentUser() == null) {
-                    Toast.makeText(this, "You need to login first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "You need to login in Setting first", Toast.LENGTH_SHORT).show();
                 } else {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MeasureFragment()).commit();
                 }
                 break;
             case R.id.nav_fitting:
                 if (firebaseAuth.getCurrentUser() == null) {
-                    Toast.makeText(this, "You need to login first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "You need to login in Setting first", Toast.LENGTH_SHORT).show();
                 } else {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FittingRoomFragment()).commit();
                 }
                 break;
             case R.id.nav_wish:
                 if (firebaseAuth.getCurrentUser() == null) {
-                    Toast.makeText(this, "You need to login first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "You need to login in Setting first", Toast.LENGTH_SHORT).show();
                 } else {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WishListFragment()).commit();
                 }
                 break;
             case R.id.nav_shoppingCart:
                 if (firebaseAuth.getCurrentUser() == null) {
-                    Toast.makeText(this, "You need to login first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "You need to login in Setting first", Toast.LENGTH_SHORT).show();
                 } else {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ShoppingCartFragment()).commit();
                 }
                 break;
             case R.id.nav_profile:
                 if (firebaseAuth.getCurrentUser() == null) {
-                    Toast.makeText(this, "You need to login first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "You need to login in Setting first", Toast.LENGTH_SHORT).show();
                 } else {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
                 }

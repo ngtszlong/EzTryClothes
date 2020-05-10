@@ -200,7 +200,6 @@ public class EnterProfileActivity extends AppCompatActivity {
                     }
                 });
     }
-
     private void getDownloadUrl(StorageReference reference) {
         reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -218,6 +217,7 @@ public class EnterProfileActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void setUserProfileUrl(Uri uri) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

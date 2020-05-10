@@ -40,7 +40,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ListAdapter.ViewHolder holder, int position) {
         ListItem listItem = listItemArrayList.get(position);
         holder.list_name.setText(listItem.getName_Eng());
-        Picasso.get().load(listItem.getImage()).into(holder.list_image);
+        if (!listItem.getImage().isEmpty()){
+            Picasso.get().load(listItem.getImage()).into(holder.list_image);
+        }
         holder.list_price.setText(listItem.getPrice());
         holder.list_gender.setText(listItem.getGender());
     }

@@ -1,19 +1,13 @@
-package com.ngtszlong.eztrycloth;
+package com.ngtszlong.eztrycloth.Profile;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.Spanned;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +37,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.ngtszlong.eztrycloth.setting.ChangePwActivity;
+import com.ngtszlong.eztrycloth.R;
 import com.ngtszlong.eztrycloth.setting.register.Profile;
 import com.squareup.picasso.Picasso;
 

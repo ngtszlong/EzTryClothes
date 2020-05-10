@@ -1,4 +1,4 @@
-package com.ngtszlong.eztrycloth;
+package com.ngtszlong.eztrycloth.Measure;
 
 import android.app.Activity;
 import android.content.Context;
@@ -50,6 +50,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.ngtszlong.eztrycloth.R;
 import com.ngtszlong.eztrycloth.setting.register.Profile;
 import com.squareup.picasso.Picasso;
 

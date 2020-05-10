@@ -1,4 +1,4 @@
-package com.ngtszlong.eztrycloth;
+package com.ngtszlong.eztrycloth.FittingRoom;
 
 import android.os.Bundle;
 
@@ -22,12 +22,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.ngtszlong.eztrycloth.R;
 import com.ngtszlong.eztrycloth.wishlist.Wishlist;
 import com.ngtszlong.eztrycloth.wishlist.WishlistAdapter;
 
 import java.util.ArrayList;
 
-public class FittingRoomFragment extends Fragment implements WishlistAdapter.OnItemClickListener {
+public class FittingRoomFragment extends Fragment implements TryAdapter.OnItemClickListener {
     RecyclerView rv_clothes;
 
     FirebaseDatabase mFirebaseDatabase;
@@ -38,7 +39,8 @@ public class FittingRoomFragment extends Fragment implements WishlistAdapter.OnI
     private FirebaseUser user;
 
     private ViewGroup mainlayout;
-    private ImageView moveimage;
+    RelativeLayout relativeLayout;
+    RelativeLayout.LayoutParams params;
 
     private int xDelta;
     private int yDelta;
@@ -51,6 +53,10 @@ public class FittingRoomFragment extends Fragment implements WishlistAdapter.OnI
         rv_clothes = v.findViewById(R.id.rv_clothes);
         rv_clothes.setHasFixedSize(true);
         rv_clothes.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+
+        relativeLayout = v.findViewById(R.id.rl_background);
+        params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        relativeLayout = new RelativeLayout(getContext());
 
         fAuth = FirebaseAuth.getInstance();
         user = fAuth.getCurrentUser();
@@ -66,6 +72,7 @@ public class FittingRoomFragment extends Fragment implements WishlistAdapter.OnI
                 }
                 tryAdapter = new TryAdapter(getContext(), wishlistArrayList);
                 rv_clothes.setAdapter(tryAdapter);
+                tryAdapter.setOnItemClickListener(FittingRoomFragment.this);
             }
 
             @Override
@@ -76,14 +83,11 @@ public class FittingRoomFragment extends Fragment implements WishlistAdapter.OnI
         mRef.keepSynced(true);
 
         mainlayout = (RelativeLayout) v.findViewById(R.id.rl_background);
-        moveimage = (ImageView) v.findViewById(R.id.moveimage);
-
-        moveimage.setOnTouchListener(onTouchListener(v));
 
         return v;
     }
 
-    private View.OnTouchListener onTouchListener(View v) {
+    private View.OnTouchListener onTouchListener() {
         return new View.OnTouchListener() {
             public boolean onTouch(View view, MotionEvent event) {
                 final int x = (int) event.getRawX();
@@ -114,6 +118,13 @@ public class FittingRoomFragment extends Fragment implements WishlistAdapter.OnI
 
     @Override
     public void onItemClick(int position) {
-
+        Toast.makeText(getContext(), "Hi", Toast.LENGTH_SHORT).show();
+        for (int i = 0; i < position; i++) {
+            ImageView imageView = new ImageView(getContext());
+            imageView.setImageResource(R.drawable.jacket);
+            imageView.setOnTouchListener(onTouchListener());
+            imageView.setLayoutParams(params);
+            relativeLayout.addView(imageView);
+        }
     }
 }
