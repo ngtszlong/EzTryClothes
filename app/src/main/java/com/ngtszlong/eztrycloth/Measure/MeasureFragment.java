@@ -1,33 +1,20 @@
 package com.ngtszlong.eztrycloth.Measure;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.provider.MediaStore;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -35,11 +22,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -47,31 +30,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.ngtszlong.eztrycloth.R;
-import com.ngtszlong.eztrycloth.setting.register.Profile;
-import com.squareup.picasso.Picasso;
+import com.ngtszlong.eztrycloth.Profile.Profile;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-
-import static android.app.Activity.RESULT_CANCELED;
-import static androidx.media.MediaBrowserServiceCompat.RESULT_OK;
 
 public class MeasureFragment extends Fragment {
     private String url = "https://saia.3dlook.me/api/v2/persons/?measurements_type=all";
@@ -86,8 +55,8 @@ public class MeasureFragment extends Fragment {
     private String front;
     private String side;
     private String height;
+    private String weight;
 
-    //TextView test;
     private RequestQueue queue;
     private JSONObject jsonObject = new JSONObject();
 
@@ -124,10 +93,8 @@ public class MeasureFragment extends Fragment {
         getActivity().setTitle("Measurement");
         initialize(view);
 
-        //test = view.findViewById(R.id.test);
         queue = Volley.newRequestQueue(getContext());
         jsonObject = new JSONObject();
-
         getdata();
         get();
         return view;
@@ -163,10 +130,10 @@ public class MeasureFragment extends Fragment {
 
 
     private void put() {
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, "https://saia.3dlook.me/api/v2/persons/", jsonObject, new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, "https://saia.3dlook.me/api/v2/persons/?measurements_type=all", jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
+                Toast.makeText(getContext(), "Successful request", Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -178,10 +145,10 @@ public class MeasureFragment extends Fragment {
                 HashMap headers = new HashMap();
                 headers.put("Authorization", key);
                 headers.put("Content-Type", "application/json");
-                return headers;
+                return super.getHeaders();
             }
         };
-        //queue.add(request);
+        queue.add(request);
     }
 
     private void get() {
@@ -278,15 +245,17 @@ public class MeasureFragment extends Fragment {
                         height = profile.getHeight();
                         front = profile.getFront();
                         side = profile.getSide();
+                        weight = profile.getWeight();
                         try {
                             jsonObject.put("gender", gender.toLowerCase());
                             jsonObject.put("height", Integer.valueOf(height));
-                            jsonObject.put("front_image", convertUrlToBase64(front));
+                            jsonObject.put("weight", Float.valueOf(weight));
+                            jsonObject.put("front_image",convertUrlToBase64(front));
                             jsonObject.put("side_image", convertUrlToBase64(side));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        //put();
+                        put();
                     }
                 }
             }
@@ -298,21 +267,14 @@ public class MeasureFragment extends Fragment {
         });
     }
 
-    public String convertUrlToBase64(String url) {
-        URL newurl;
-        Bitmap bitmap;
-        String base64 = "";
+    public Bitmap convertUrlToBase64(String url) {
+        Bitmap bitmap = null;
         try {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-            newurl = new URL(url);
-            bitmap = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-            base64 = Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
+            byte[] bitmapArray = Base64.decode(url.split(",")[1], Base64.DEFAULT);
+            bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return base64;
+        return bitmap;
     }
 }

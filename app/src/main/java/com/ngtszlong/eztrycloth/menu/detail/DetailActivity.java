@@ -24,7 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ngtszlong.eztrycloth.R;
 import com.ngtszlong.eztrycloth.menu.list.ListItem;
-import com.ngtszlong.eztrycloth.wishlist.Wishlist;
+import com.ngtszlong.eztrycloth.shoppingcart.ShoppingCart;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -39,10 +39,8 @@ public class DetailActivity extends AppCompatActivity {
     String No;
     CardView cv_wishlist;
     CardView cv_shopcart;
-    CardView cv_try;
     FirebaseAuth fAuth;
     FirebaseUser user;
-    Wishlist wishlist;
 
     SimpleDateFormat format;
     Date date;
@@ -56,6 +54,8 @@ public class DetailActivity extends AppCompatActivity {
 
     Toolbar toolbar;
 
+    ShoppingCart shoppingCart;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,12 +68,13 @@ public class DetailActivity extends AppCompatActivity {
         cv_wishlist = findViewById(R.id.cv_wishlist);
         cv_shopcart = findViewById(R.id.cv_shopcart);
 
+        shoppingCart = new ShoppingCart();
+
         Intent intent = getIntent();
         No = intent.getStringExtra("No");
 
         fAuth = FirebaseAuth.getInstance();
         user = fAuth.getCurrentUser();
-        wishlist = new Wishlist();
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mRef = mFirebaseDatabase.getReference().child("Clothes");
@@ -97,38 +98,20 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
-        cv_wishlist.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getcurrenttime();
-                String uid = user.getUid();
-                wishlist.setNo(No);
-                wishlist.setColor(color);
-                wishlist.setName(name);
-                wishlist.setGender(gender);
-                wishlist.setPrice(price);
-                wishlist.setImage(image);
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference reference = database.getReference("Wishlist");
-                reference.child(uid).child(str).setValue(wishlist);
-                Toast.makeText(DetailActivity.this, "Added to WishList", Toast.LENGTH_SHORT).show();
-            }
-        });
-
         cv_shopcart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getcurrenttime();
                 String uid = user.getUid();
-                wishlist.setNo(No);
-                wishlist.setColor(color);
-                wishlist.setName(name);
-                wishlist.setGender(gender);
-                wishlist.setPrice(price);
-                wishlist.setImage(image);
+                shoppingCart.setNo(No);
+                shoppingCart.setColor(color);
+                shoppingCart.setName(name);
+                shoppingCart.setGender(gender);
+                shoppingCart.setPrice(price);
+                shoppingCart.setImage(image);
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference reference = database.getReference("ShoppingCart");
-                reference.child(uid).child(str).setValue(wishlist);
+                reference.child(uid).child(str).setValue(shoppingCart);
                 Toast.makeText(DetailActivity.this, "Added to Shopping Cart", Toast.LENGTH_SHORT).show();
             }
         });

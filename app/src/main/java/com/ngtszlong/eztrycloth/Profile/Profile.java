@@ -1,4 +1,4 @@
-package com.ngtszlong.eztrycloth.setting.register;
+package com.ngtszlong.eztrycloth.Profile;
 
 public class Profile {
     private String email;
@@ -12,11 +12,12 @@ public class Profile {
     private String phone;
     private String front;
     private String side;
+    private String weight;
 
     public Profile() {
     }
 
-    public Profile(String email, String uid, String name, String gender, String age, String height, String birth, String address, String phone, String front, String side) {
+    public Profile(String email, String uid, String name, String gender, String age, String height, String birth, String address, String phone, String front, String side, String weight) {
         this.email = email;
         this.uid = uid;
         this.name = name;
@@ -28,6 +29,7 @@ public class Profile {
         this.phone = phone;
         this.front = front;
         this.side = side;
+        this.weight = weight;
     }
 
     public String getPhone() {
@@ -116,5 +118,13 @@ public class Profile {
 
     public void setSide(String side) {
         this.side = side;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
     }
 }

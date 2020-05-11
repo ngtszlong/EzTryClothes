@@ -10,20 +10,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ngtszlong.eztrycloth.R;
-import com.ngtszlong.eztrycloth.wishlist.Wishlist;
-import com.ngtszlong.eztrycloth.wishlist.WishlistAdapter;
+import com.ngtszlong.eztrycloth.shoppingcart.ShoppingCart;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+
 public class TryAdapter extends RecyclerView.Adapter<TryAdapter.ViewHolder> {
     private Context context;
-    private ArrayList<Wishlist> wishlistArrayList;
+    private ArrayList<ShoppingCart> shoppingCartArrayList;
     private TryAdapter.OnItemClickListener onItemClickListener;
 
-    public TryAdapter(Context context, ArrayList<Wishlist> wishlistArrayList) {
+    public TryAdapter(Context context, ArrayList<ShoppingCart> shoppingCartArrayList) {
         this.context = context;
-        this.wishlistArrayList = wishlistArrayList;
+        this.shoppingCartArrayList = shoppingCartArrayList;
     }
 
     @NonNull
@@ -35,8 +35,8 @@ public class TryAdapter extends RecyclerView.Adapter<TryAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Wishlist wishlist = wishlistArrayList.get(position);
-        Picasso.get().load(wishlist.getImage()).into(holder.imageView);
+        ShoppingCart shoppingCart = shoppingCartArrayList.get(position);
+        Picasso.get().load(shoppingCart.getImage()).into(holder.imageView);
     }
 
     public interface OnItemClickListener {
@@ -49,7 +49,7 @@ public class TryAdapter extends RecyclerView.Adapter<TryAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return wishlistArrayList.size();
+        return shoppingCartArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

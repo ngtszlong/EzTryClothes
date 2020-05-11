@@ -11,9 +11,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,8 +24,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ngtszlong.eztrycloth.R;
-import com.ngtszlong.eztrycloth.wishlist.Wishlist;
-import com.ngtszlong.eztrycloth.wishlist.WishlistAdapter;
+import com.ngtszlong.eztrycloth.Profile.Profile;
+import com.ngtszlong.eztrycloth.shoppingcart.ShoppingCart;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -33,17 +35,24 @@ public class FittingRoomFragment extends Fragment implements TryAdapter.OnItemCl
 
     FirebaseDatabase mFirebaseDatabase;
     DatabaseReference mRef;
-    private ArrayList<Wishlist> wishlistArrayList;
+    private ArrayList<ShoppingCart> shoppingCartArrayList;
     private TryAdapter tryAdapter;
     private FirebaseAuth fAuth;
     private FirebaseUser user;
 
     private ViewGroup mainlayout;
     RelativeLayout relativeLayout;
-    RelativeLayout.LayoutParams params;
 
     private int xDelta;
     private int yDelta;
+
+    ImageButton bin;
+    Button btnxl;
+    Button btnl;
+    Button btnm;
+    Button btns;
+    Button btnxs;
+    ImageView img_background;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,22 +64,22 @@ public class FittingRoomFragment extends Fragment implements TryAdapter.OnItemCl
         rv_clothes.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         relativeLayout = v.findViewById(R.id.rl_background);
-        params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        relativeLayout = new RelativeLayout(getContext());
+        img_background = v.findViewById(R.id.img_background);
 
         fAuth = FirebaseAuth.getInstance();
         user = fAuth.getCurrentUser();
+        getImage();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mRef = mFirebaseDatabase.getReference().child("Wishlist").child(user.getUid());
+        mRef = mFirebaseDatabase.getReference().child("ShoppingCart").child(user.getUid());
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                wishlistArrayList = new ArrayList<>();
+                shoppingCartArrayList = new ArrayList<>();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    Wishlist wishlist = dataSnapshot1.getValue(Wishlist.class);
-                    wishlistArrayList.add(wishlist);
+                    ShoppingCart shoppingCart = dataSnapshot1.getValue(ShoppingCart.class);
+                    shoppingCartArrayList.add(shoppingCart);
                 }
-                tryAdapter = new TryAdapter(getContext(), wishlistArrayList);
+                tryAdapter = new TryAdapter(getContext(), shoppingCartArrayList);
                 rv_clothes.setAdapter(tryAdapter);
                 tryAdapter.setOnItemClickListener(FittingRoomFragment.this);
             }
@@ -81,10 +90,39 @@ public class FittingRoomFragment extends Fragment implements TryAdapter.OnItemCl
             }
         });
         mRef.keepSynced(true);
-
         mainlayout = (RelativeLayout) v.findViewById(R.id.rl_background);
 
+        bin = v.findViewById(R.id.imgbtn_bin);
+        btnxl = v.findViewById(R.id.btn_xl);
+        btnl = v.findViewById(R.id.btn_l);
+        btnm = v.findViewById(R.id.btn_m);
+        btns = v.findViewById(R.id.btn_s);
+        btnxs = v.findViewById(R.id.btn_xs);
+
         return v;
+    }
+
+    private void getImage() {
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mRef = mFirebaseDatabase.getReference().child("Users");
+        mRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                    Profile profile = dataSnapshot1.getValue(Profile.class);
+                    if (user.getUid().equals(profile.getUid())){
+                        Picasso.get().load(profile.getFront()).into(img_background);
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        mRef.keepSynced(true);
     }
 
     private View.OnTouchListener onTouchListener() {
@@ -109,6 +147,7 @@ public class FittingRoomFragment extends Fragment implements TryAdapter.OnItemCl
                         lParams.bottomMargin = 0;
                         view.setLayoutParams(lParams);
                         break;
+                        case MotionEvent.ACTION_CANCEL:
                 }
                 mainlayout.invalidate();
                 return true;
@@ -118,13 +157,11 @@ public class FittingRoomFragment extends Fragment implements TryAdapter.OnItemCl
 
     @Override
     public void onItemClick(int position) {
-        Toast.makeText(getContext(), "Hi", Toast.LENGTH_SHORT).show();
-        for (int i = 0; i < position; i++) {
-            ImageView imageView = new ImageView(getContext());
-            imageView.setImageResource(R.drawable.jacket);
-            imageView.setOnTouchListener(onTouchListener());
-            imageView.setLayoutParams(params);
-            relativeLayout.addView(imageView);
-        }
+        ShoppingCart shoppingCart = shoppingCartArrayList.get(position);
+        ImageView imageView = new ImageView(getContext());
+        Picasso.get().load(shoppingCart.getImage()).into(imageView);
+        imageView.setOnTouchListener(onTouchListener());
+        imageView.setLayoutParams(new RelativeLayout.LayoutParams(400, 400));
+        relativeLayout.addView(imageView);
     }
 }

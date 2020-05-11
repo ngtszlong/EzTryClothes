@@ -22,9 +22,6 @@ public class SettingFragment extends Fragment {
 
     Switch st_chinese;
     Switch st_english;
-    Switch st_large;
-    Switch st_medium;
-    Switch st_small;
     FirebaseAuth firebaseAuth;
 
     @Nullable
@@ -70,11 +67,7 @@ public class SettingFragment extends Fragment {
 
         st_chinese = view.findViewById(R.id.chinese);
         st_english = view.findViewById(R.id.english);
-        st_large = view.findViewById(R.id.large);
-        st_medium = view.findViewById(R.id.medium);
-        st_small = view.findViewById(R.id.small);
         st_english.setChecked(true);
-        st_medium.setChecked(true);
 
         st_chinese.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -90,36 +83,6 @@ public class SettingFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     st_chinese.setChecked(false);
-                }
-            }
-        });
-
-        st_large.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    st_medium.setChecked(false);
-                    st_small.setChecked(false);
-                }
-            }
-        });
-
-        st_medium.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    st_large.setChecked(false);
-                    st_small.setChecked(false);
-                }
-            }
-        });
-
-        st_small.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    st_large.setChecked(false);
-                    st_medium.setChecked(false);
                 }
             }
         });

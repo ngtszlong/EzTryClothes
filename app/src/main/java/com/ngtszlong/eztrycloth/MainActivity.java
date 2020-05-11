@@ -1,6 +1,7 @@
 package com.ngtszlong.eztrycloth;
 
 import android.Manifest;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +16,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,9 +31,9 @@ import com.ngtszlong.eztrycloth.Measure.MeasureFragment;
 import com.ngtszlong.eztrycloth.Profile.ProfileFragment;
 import com.ngtszlong.eztrycloth.menu.MenuFragment;
 import com.ngtszlong.eztrycloth.setting.SettingFragment;
-import com.ngtszlong.eztrycloth.setting.register.Profile;
+import com.ngtszlong.eztrycloth.Profile.Profile;
 import com.ngtszlong.eztrycloth.shoppingcart.ShoppingCartFragment;
-import com.ngtszlong.eztrycloth.wishlist.WishListFragment;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,12 +51,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String username;
     String phonenumber;
     ImageView image;
+    SharedPreferences sharedPreferences;
+    boolean aBoolean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         checkPermission();
+        /*SharedPreferences.Editor editor = getSharedPreferences("profiledata", MODE_PRIVATE).edit();
+        editor.putBoolean("info", false);
+        editor.apply();
+        sharedPreferences = getSharedPreferences("profiledata", MODE_PRIVATE);
+        aBoolean = sharedPreferences.getBoolean("info", false);*/
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -85,9 +92,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void setHeaderInfo() {
         if (firebaseAuth.getCurrentUser() != null) {
             firebaseUser = firebaseAuth.getCurrentUser();
-            if (firebaseUser.getPhotoUrl() != null) {
-                Glide.with(this).load(firebaseUser.getPhotoUrl()).into(image);
-            }
             firebaseDatabase = FirebaseDatabase.getInstance();
             databaseReference = firebaseDatabase.getReference().child("Users");
             databaseReference.addValueEventListener(new ValueEventListener() {
@@ -99,8 +103,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         if (firebaseUser.getUid().equals(profile.getUid())) {
                             username = String.valueOf(profile.getName());
                             phonenumber = String.valueOf(profile.getPhone());
-                            name.setText("Username : " + username);
-                            phone.setText("Phone number : " + phonenumber);
+                            if (!username.isEmpty()) {
+                                name.setText("Username : " + username);
+                            } else {
+                                name.setText("You need to complete your profile");
+                            }
+                            if (!phonenumber.isEmpty()) {
+                                phone.setText("Phone number : " + phonenumber);
+                            } else {
+                                phone.setText("You need to complete your profile");
+                            }
+                            Picasso.get().load(profile.getFront()).into(image);
                         }
                     }
                 }
@@ -123,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (firebaseAuth.getCurrentUser() == null) {
                     Toast.makeText(this, "You need to login in Setting first", Toast.LENGTH_SHORT).show();
                 } else {
+                    //checkData();
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MeasureFragment()).commit();
                 }
                 break;
@@ -131,13 +145,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Toast.makeText(this, "You need to login in Setting first", Toast.LENGTH_SHORT).show();
                 } else {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FittingRoomFragment()).commit();
-                }
-                break;
-            case R.id.nav_wish:
-                if (firebaseAuth.getCurrentUser() == null) {
-                    Toast.makeText(this, "You need to login in Setting first", Toast.LENGTH_SHORT).show();
-                } else {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WishListFragment()).commit();
                 }
                 break;
             case R.id.nav_shoppingCart:
@@ -161,6 +168,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void checkData() {
+        if (firebaseAuth.getCurrentUser() != null) {
+            firebaseUser = firebaseAuth.getCurrentUser();
+            firebaseDatabase = FirebaseDatabase.getInstance();
+            databaseReference = firebaseDatabase.getReference().child("Users");
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                        Profile profile = dataSnapshot1.getValue(Profile.class);
+                        if (firebaseUser.getUid().equals(profile.getUid())) {
+                            if (!profile.getFront().equals("") || !profile.getSide().equals("") || !profile.getGender().equals("") || !profile.getHeight().equals("")) {
+                                SharedPreferences.Editor editor = getSharedPreferences("profiledata", MODE_PRIVATE).edit();
+                                editor.putBoolean("info", true);
+                                editor.apply();
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 
     @Override

@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.ngtszlong.eztrycloth.MainActivity;
+import com.ngtszlong.eztrycloth.Profile.Profile;
 import com.ngtszlong.eztrycloth.R;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -89,11 +90,12 @@ public class RegisterActivity extends AppCompatActivity {
                                 profile.setPhone("");
                                 profile.setFront("");
                                 profile.setSide("");
+                                profile.setWeight("");
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 DatabaseReference reference = database.getReference("Users");
                                 reference.child(uid).setValue(profile);
 
-                                startActivity(new Intent(getApplicationContext(), EnterProfileActivity.class));
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             } else {
                                 Toast.makeText(RegisterActivity.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();

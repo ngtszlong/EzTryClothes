@@ -21,7 +21,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ngtszlong.eztrycloth.R;
 import com.ngtszlong.eztrycloth.menu.detail.DetailActivity;
-import com.ngtszlong.eztrycloth.wishlist.Wishlist;
 
 import java.util.ArrayList;
 
