@@ -13,11 +13,12 @@ public class Profile {
     private String front;
     private String side;
     private String weight;
+    private String id;
 
     public Profile() {
     }
 
-    public Profile(String email, String uid, String name, String gender, String age, String height, String birth, String address, String phone, String front, String side, String weight) {
+    public Profile(String email, String uid, String name, String gender, String age, String height, String birth, String address, String phone, String front, String side, String weight, String id) {
         this.email = email;
         this.uid = uid;
         this.name = name;
@@ -30,6 +31,7 @@ public class Profile {
         this.front = front;
         this.side = side;
         this.weight = weight;
+        this.id = id;
     }
 
     public String getPhone() {
@@ -126,5 +128,13 @@ public class Profile {
 
     public void setWeight(String weight) {
         this.weight = weight;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

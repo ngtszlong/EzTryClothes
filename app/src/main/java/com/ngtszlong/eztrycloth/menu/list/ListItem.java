@@ -12,13 +12,11 @@ public class ListItem {
     private String Color_Chi;
     private String Color_Eng;
     private String Image;
-    private String XXL;
     private String XL;
     private String L;
     private String M;
     private String S;
     private String XS;
-    private String XXS;
     private String Description_Chi;
     private String Description_Eng;
     private String Material_Chi;
@@ -26,22 +24,14 @@ public class ListItem {
     private String Quantity;
     private String Price;
     private String Discount;
+    private String try_photo;
+    private String uid;
+    private String ReleaseDate;
 
     public ListItem() {
     }
 
-    public ListItem(String no, String name_Chi, String name_Eng, String price, String discount, String gender, String image, String type) {
-        No = no;
-        Name_Chi = name_Chi;
-        Name_Eng = name_Eng;
-        Price = price;
-        Discount = discount;
-        Gender = gender;
-        Image = image;
-        Type = type;
-    }
-
-    public ListItem(String no, String company, String name_Chi, String name_Eng, String gender, String type, String color_Chi, String color_Eng, String image, String XXL, String XL, String l, String m, String s, String XS, String XXS, String description_Chi, String description_Eng, String material_Chi, String material_Eng, String quantity, String price, String discount) {
+    public ListItem(String no, String company, String name_Chi, String name_Eng, String gender, String type, String color_Chi, String color_Eng, String image, String XL, String l, String m, String s, String XS, String description_Chi, String description_Eng, String material_Chi, String material_Eng, String quantity, String price, String discount, String try_photo, String uid, String releaseDate) {
         No = no;
         Company = company;
         Name_Chi = name_Chi;
@@ -51,13 +41,11 @@ public class ListItem {
         Color_Chi = color_Chi;
         Color_Eng = color_Eng;
         Image = image;
-        this.XXL = XXL;
         this.XL = XL;
         L = l;
         M = m;
         S = s;
         this.XS = XS;
-        this.XXS = XXS;
         Description_Chi = description_Chi;
         Description_Eng = description_Eng;
         Material_Chi = material_Chi;
@@ -65,6 +53,9 @@ public class ListItem {
         Quantity = quantity;
         Price = price;
         Discount = discount;
+        this.try_photo = try_photo;
+        this.uid = uid;
+        ReleaseDate = releaseDate;
     }
 
     public String getNo() {
@@ -139,14 +130,6 @@ public class ListItem {
         Image = image;
     }
 
-    public String getXXL() {
-        return XXL;
-    }
-
-    public void setXXL(String XXL) {
-        this.XXL = XXL;
-    }
-
     public String getXL() {
         return XL;
     }
@@ -185,14 +168,6 @@ public class ListItem {
 
     public void setXS(String XS) {
         this.XS = XS;
-    }
-
-    public String getXXS() {
-        return XXS;
-    }
-
-    public void setXXS(String XXS) {
-        this.XXS = XXS;
     }
 
     public String getDescription_Chi() {
@@ -249,5 +224,29 @@ public class ListItem {
 
     public void setDiscount(String discount) {
         Discount = discount;
+    }
+
+    public String getTry_photo() {
+        return try_photo;
+    }
+
+    public void setTry_photo(String try_photo) {
+        this.try_photo = try_photo;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getReleaseDate() {
+        return ReleaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        ReleaseDate = releaseDate;
     }
 }

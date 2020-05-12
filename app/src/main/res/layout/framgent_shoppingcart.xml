@@ -26,7 +26,7 @@
         android:paddingBottom="10dp">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cv_sc_shopcart"
+            android:id="@+id/btn_shopcart"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             app:cardBackgroundColor="@color/colorroyalblue"

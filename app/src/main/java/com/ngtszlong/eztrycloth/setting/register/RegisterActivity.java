@@ -91,6 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 profile.setFront("");
                                 profile.setSide("");
                                 profile.setWeight("");
+                                profile.setId("");
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 DatabaseReference reference = database.getReference("Users");
                                 reference.child(uid).setValue(profile);

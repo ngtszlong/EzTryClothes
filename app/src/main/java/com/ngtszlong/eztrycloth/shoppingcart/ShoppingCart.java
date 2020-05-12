@@ -1,27 +1,43 @@
 package com.ngtszlong.eztrycloth.shoppingcart;
 
 public class ShoppingCart {
+    private String companyuid;
     private String uid;
     private String no;
     private String image;
     private String gender;
     private String name;
+    private String quantity;
     private String color;
     private String price;
     private String discount;
+    private String tryimage;
+    private String str;
 
-    public ShoppingCart(String uid, String no, String image, String gender, String name, String color, String price, String discount) {
+    public ShoppingCart() {
+    }
+
+    public ShoppingCart(String companyuid, String uid, String no, String image, String gender, String name, String quantity, String color, String price, String discount, String tryimage, String str) {
+        this.companyuid = companyuid;
         this.uid = uid;
         this.no = no;
         this.image = image;
         this.gender = gender;
         this.name = name;
+        this.quantity = quantity;
         this.color = color;
         this.price = price;
         this.discount = discount;
+        this.tryimage = tryimage;
+        this.str = str;
     }
 
-    public ShoppingCart() {
+    public String getCompanyuid() {
+        return companyuid;
+    }
+
+    public void setCompanyuid(String companyuid) {
+        this.companyuid = companyuid;
     }
 
     public String getUid() {
@@ -64,6 +80,14 @@ public class ShoppingCart {
         this.name = name;
     }
 
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+    }
+
     public String getColor() {
         return color;
     }
@@ -86,5 +110,21 @@ public class ShoppingCart {
 
     public void setDiscount(String discount) {
         this.discount = discount;
+    }
+
+    public String getTryimage() {
+        return tryimage;
+    }
+
+    public void setTryimage(String tryimage) {
+        this.tryimage = tryimage;
+    }
+
+    public String getStr() {
+        return str;
+    }
+
+    public void setStr(String str) {
+        this.str = str;
     }
 }

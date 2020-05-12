@@ -145,24 +145,6 @@
                     android:orientation="vertical">
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/cv_wishlist"
-                        android:layout_width="170dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="10dp"
-                        app:cardBackgroundColor="@color/colorroyalblue"
-                        app:cardCornerRadius="15dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="Add To Wish List"
-                            android:textColor="#FFFFFF" />
-
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
                         android:id="@+id/cv_shopcart"
                         android:layout_width="170dp"
                         android:layout_height="30dp"

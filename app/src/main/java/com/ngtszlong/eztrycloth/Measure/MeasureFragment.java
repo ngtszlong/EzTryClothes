@@ -1,5 +1,7 @@
 package com.ngtszlong.eztrycloth.Measure;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -39,6 +41,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,7 +61,6 @@ public class MeasureFragment extends Fragment {
     private String weight;
 
     private RequestQueue queue;
-    private JSONObject jsonObject = new JSONObject();
 
     private TextView txt_Bustgirth;
     private TextView txt_Waistgirth;
@@ -85,6 +87,8 @@ public class MeasureFragment extends Fragment {
     private TextView txt_Insidelegheight;
     private TextView txt_Upperhipheight;
     private TextView txt_Thighgirth;
+    private String id;
+    ProgressDialog dialog;
 
     @Nullable
     @Override
@@ -92,11 +96,8 @@ public class MeasureFragment extends Fragment {
         View view = inflater.inflate(R.layout.framgent_measure, container, false);
         getActivity().setTitle("Measurement");
         initialize(view);
-
         queue = Volley.newRequestQueue(getContext());
-        jsonObject = new JSONObject();
         getdata();
-        get();
         return view;
     }
 
@@ -130,9 +131,45 @@ public class MeasureFragment extends Fragment {
 
 
     private void put() {
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, "https://saia.3dlook.me/api/v2/persons/?measurements_type=all", jsonObject, new Response.Listener<JSONObject>() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("gender", gender.toLowerCase());
+            jsonObject.put("height", Integer.valueOf(height));
+            jsonObject.put("weight", Float.valueOf(weight));
+            jsonObject.put("front_image", convertUrlToBase64(front));
+            jsonObject.put("side_image", convertUrlToBase64(side));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                try {
+                    id = String.valueOf(response.getJSONObject("id"));
+                    firebaseDatabase = FirebaseDatabase.getInstance();
+                    databaseReference = firebaseDatabase.getReference().child("Users");
+                    databaseReference.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                                Profile profile = dataSnapshot1.getValue(Profile.class);
+                                if (firebaseUser.getUid().equals(profile.getUid())) {
+                                    profile.setId(id);
+                                    databaseReference.child(profile.getUid()).setValue(profile);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                    get();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getContext(), "Please Try Again", Toast.LENGTH_SHORT).show();
+                }
                 Toast.makeText(getContext(), "Successful request", Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
@@ -141,11 +178,11 @@ public class MeasureFragment extends Fragment {
                 error.printStackTrace();
             }
         }) {
-            public Map getHeaders() throws AuthFailureError {
+            public Map getHeaders() {
                 HashMap headers = new HashMap();
                 headers.put("Authorization", key);
                 headers.put("Content-Type", "application/json");
-                return super.getHeaders();
+                return headers;
             }
         };
         queue.add(request);
@@ -159,7 +196,7 @@ public class MeasureFragment extends Fragment {
                     JSONArray jsonArray = response.getJSONArray("results");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject bodysize = jsonArray.getJSONObject(i);
-                        if (bodysize.getString("id").equals("129406")) {
+                        if (bodysize.getString("id").equals(id)) {
                             JSONObject volumeparams = bodysize.getJSONObject("volume_params");
                             for (int x = 0; x < volumeparams.length(); x++) {
                                 volumeparams(volumeparams);
@@ -178,6 +215,7 @@ public class MeasureFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                Toast.makeText(getContext(), "Please Try Again", Toast.LENGTH_SHORT).show();
             }
         }) {
             public Map getHeaders() throws AuthFailureError {
@@ -246,16 +284,12 @@ public class MeasureFragment extends Fragment {
                         front = profile.getFront();
                         side = profile.getSide();
                         weight = profile.getWeight();
-                        try {
-                            jsonObject.put("gender", gender.toLowerCase());
-                            jsonObject.put("height", Integer.valueOf(height));
-                            jsonObject.put("weight", Float.valueOf(weight));
-                            jsonObject.put("front_image",convertUrlToBase64(front));
-                            jsonObject.put("side_image", convertUrlToBase64(side));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        id = profile.getId();
+                        if (id.equals("")) {
+                            put();
+                        } else {
+                            get();
                         }
-                        put();
                     }
                 }
             }
@@ -267,14 +301,21 @@ public class MeasureFragment extends Fragment {
         });
     }
 
-    public Bitmap convertUrlToBase64(String url) {
-        Bitmap bitmap = null;
+    public String convertUrlToBase64(String url) {
+        URL newurl;
+        Bitmap bitmap;
+        String base64 = "";
         try {
-            byte[] bitmapArray = Base64.decode(url.split(",")[1], Base64.DEFAULT);
-            bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0, bitmapArray.length);
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+            newurl = new URL(url);
+            bitmap = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            base64 = Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return bitmap;
+        return base64;
     }
 }

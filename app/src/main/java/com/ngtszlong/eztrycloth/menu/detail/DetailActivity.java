@@ -37,7 +37,6 @@ public class DetailActivity extends AppCompatActivity {
     DatabaseReference mRef;
     public static ArrayList<ListItem> listItems;
     String No;
-    CardView cv_wishlist;
     CardView cv_shopcart;
     FirebaseAuth fAuth;
     FirebaseUser user;
@@ -51,6 +50,9 @@ public class DetailActivity extends AppCompatActivity {
     String gender;
     String price;
     String image;
+    String companyuid;
+    String imagetry;
+    String action = "No";
 
     Toolbar toolbar;
 
@@ -65,7 +67,6 @@ public class DetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        cv_wishlist = findViewById(R.id.cv_wishlist);
         cv_shopcart = findViewById(R.id.cv_shopcart);
 
         shoppingCart = new ShoppingCart();
@@ -101,18 +102,43 @@ public class DetailActivity extends AppCompatActivity {
         cv_shopcart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getcurrenttime();
-                String uid = user.getUid();
-                shoppingCart.setNo(No);
-                shoppingCart.setColor(color);
-                shoppingCart.setName(name);
-                shoppingCart.setGender(gender);
-                shoppingCart.setPrice(price);
-                shoppingCart.setImage(image);
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference reference = database.getReference("ShoppingCart");
-                reference.child(uid).child(str).setValue(shoppingCart);
-                Toast.makeText(DetailActivity.this, "Added to Shopping Cart", Toast.LENGTH_SHORT).show();
+                mFirebaseDatabase = FirebaseDatabase.getInstance();
+                mRef = mFirebaseDatabase.getReference().child("ShoppingCart").child(user.getUid());
+                mRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                            ListItem l = dataSnapshot1.getValue(ListItem.class);
+                            if (l.getNo().equals(No)) {
+                                action = "Yes";
+                                Toast.makeText(DetailActivity.this, "It has already added to your Shopping Cart", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        if (action.equals("No")) {
+                            getcurrenttime();
+                            String uid = user.getUid();
+                            shoppingCart.setNo(No);
+                            shoppingCart.setColor(color);
+                            shoppingCart.setName(name);
+                            shoppingCart.setGender(gender);
+                            shoppingCart.setPrice(price);
+                            shoppingCart.setImage(image);
+                            shoppingCart.setCompanyuid(companyuid);
+                            shoppingCart.setTryimage(imagetry);
+                            shoppingCart.setQuantity("1");
+                            shoppingCart.setStr(str);
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            DatabaseReference reference = database.getReference("ShoppingCart");
+                            reference.child(uid).child(str).setValue(shoppingCart);
+                            Toast.makeText(DetailActivity.this, "Added to Shopping Cart", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
     }
@@ -132,7 +158,9 @@ public class DetailActivity extends AppCompatActivity {
         TextView quantity = findViewById(R.id.detail_Quantity);
         TextView description = findViewById(R.id.detail_description);
         TextView material = findViewById(R.id.detail_material);
-        Picasso.get().load(l.getImage()).into(image);
+        if (!l.getImage().equals("")) {
+            Picasso.get().load(l.getImage()).into(image);
+        }
         name.setText(l.getName_Eng());
         gender.setText(l.getGender());
         color.setText(l.getColor_Eng());
@@ -144,11 +172,13 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void setfirebasedata(ListItem l) {
+        companyuid = l.getUid();
         name = l.getName_Eng();
         color = l.getColor_Eng();
         gender = l.getGender();
         price = l.getPrice();
         image = l.getImage();
+        imagetry = l.getTry_photo();
     }
 
     @Override

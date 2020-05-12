@@ -28,6 +28,7 @@ import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.ngtszlong.eztrycloth.FittingRoom.FittingRoomFragment;
 import com.ngtszlong.eztrycloth.Measure.MeasureFragment;
+import com.ngtszlong.eztrycloth.Order.OrderFragment;
 import com.ngtszlong.eztrycloth.Profile.ProfileFragment;
 import com.ngtszlong.eztrycloth.menu.MenuFragment;
 import com.ngtszlong.eztrycloth.setting.SettingFragment;
@@ -136,7 +137,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (firebaseAuth.getCurrentUser() == null) {
                     Toast.makeText(this, "You need to login in Setting first", Toast.LENGTH_SHORT).show();
                 } else {
-                    //checkData();
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MeasureFragment()).commit();
                 }
                 break;
@@ -154,6 +154,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ShoppingCartFragment()).commit();
                 }
                 break;
+            case R.id.nav_order:
+                if (firebaseAuth.getCurrentUser() == null) {
+                    Toast.makeText(this, "You need to login in Setting first", Toast.LENGTH_SHORT).show();
+                } else {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new OrderFragment()).commit();
+                }
+                break;
             case R.id.nav_profile:
                 if (firebaseAuth.getCurrentUser() == null) {
                     Toast.makeText(this, "You need to login in Setting first", Toast.LENGTH_SHORT).show();
@@ -168,34 +175,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    private void checkData() {
-        if (firebaseAuth.getCurrentUser() != null) {
-            firebaseUser = firebaseAuth.getCurrentUser();
-            firebaseDatabase = FirebaseDatabase.getInstance();
-            databaseReference = firebaseDatabase.getReference().child("Users");
-            databaseReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                        Profile profile = dataSnapshot1.getValue(Profile.class);
-                        if (firebaseUser.getUid().equals(profile.getUid())) {
-                            if (!profile.getFront().equals("") || !profile.getSide().equals("") || !profile.getGender().equals("") || !profile.getHeight().equals("")) {
-                                SharedPreferences.Editor editor = getSharedPreferences("profiledata", MODE_PRIVATE).edit();
-                                editor.putBoolean("info", true);
-                                editor.apply();
-                            }
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-        }
     }
 
     @Override
