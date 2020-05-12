@@ -22,6 +22,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ngtszlong.eztrycloth.MainActivity;
+import com.ngtszlong.eztrycloth.Order.Order;
+import com.ngtszlong.eztrycloth.Profile.Profile;
 import com.ngtszlong.eztrycloth.R;
 import com.ngtszlong.eztrycloth.menu.detail.DetailActivity;
 
@@ -40,9 +42,13 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
     private FirebaseUser user;
     private CardView cardView;
 
+    Order order;
+
     SimpleDateFormat format;
     Date date;
     String str;
+
+    String address;
 
     @Nullable
     @Override
@@ -55,6 +61,8 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         shopcartrecyclerView.setLayoutManager(linearLayoutManager);
+
+        order = new Order();
 
         fAuth = FirebaseAuth.getInstance();
         user = fAuth.getCurrentUser();
@@ -84,14 +92,44 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
             @Override
             public void onClick(View v) {
                 getcurrenttime();
-                String uid = user.getUid();
+                final String uid = user.getUid();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference reference = database.getReference("PurchaseOrder");
                 for (int i = 0; i < shoppingCartArrayList.size(); i++) {
                     if (!shoppingCartArrayList.get(i).getQuantity().equals("0")) {
-                        reference.child(uid).child("Order" + str).child(String.valueOf(i)).setValue(shoppingCartArrayList.get(i));
-                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("ShoppingCart").child(user.getUid()).child(shoppingCartArrayList.get(i).getStr());
-                        databaseReference.removeValue();
+                        order.setCompanyuid(shoppingCartArrayList.get(i).getCompanyuid());
+                        order.setDate(str);
+                        order.setDiscount(shoppingCartArrayList.get(i).getDiscount());
+                        order.setUid(shoppingCartArrayList.get(i).getUid());
+                        order.setStr(shoppingCartArrayList.get(i).getStr());
+                        order.setName(shoppingCartArrayList.get(i).getName());
+                        order.setImage(shoppingCartArrayList.get(i).getImage());
+                        order.setPrice(shoppingCartArrayList.get(i).getPrice());
+                        order.setQuantity(shoppingCartArrayList.get(i).getQuantity());
+                        order.setNo(shoppingCartArrayList.get(i).getNo());
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users");
+                        databaseReference.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                                    Profile profile = dataSnapshot1.getValue(Profile.class);
+                                    if (profile.getUid().equals(uid)){
+                                        address = profile.getAddress();
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                        order.setAddress(address);
+
+                        reference.child(uid).child("Order"+str).child(String.valueOf(i)).setValue(order);
+
+                        DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("ShoppingCart").child(user.getUid()).child(shoppingCartArrayList.get(i).getStr());
+                        databaseReference1.removeValue();
                     }
                 }
                 Toast.makeText(getContext(), "You have already Ordered", Toast.LENGTH_SHORT).show();
