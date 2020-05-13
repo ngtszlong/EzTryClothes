@@ -109,7 +109,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="23dp"
-                                android:text="Color : " />
+                                android:text="@string/Color" />
 
                             <TextView
                                 android:id="@+id/detail_color"
@@ -126,7 +126,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="23dp"
-                                android:text="Quantity : " />
+                                android:text="@string/Quantity" />
 
                             <TextView
                                 android:id="@+id/detail_Quantity"
@@ -157,7 +157,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="Add To Shopping Cart"
+                            android:text="@string/AddToShoppingCart"
                             android:textColor="#FFFFFF" />
                     </androidx.cardview.widget.CardView>
                 </LinearLayout>
@@ -173,7 +173,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Material : " />
+                    android:text="@string/Material" />
 
                 <TextView
                     android:id="@+id/detail_material"
@@ -184,7 +184,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Description : " />
+                    android:text="@string/Description" />
 
                 <TextView
                     android:id="@+id/detail_description"

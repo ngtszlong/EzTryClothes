@@ -1,15 +1,17 @@
-package com.ngtszlong.eztrycloth.setting.register;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
+package com.ngtszlong.eztrycloth.Register;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -24,35 +26,31 @@ import com.ngtszlong.eztrycloth.MainActivity;
 import com.ngtszlong.eztrycloth.Profile.Profile;
 import com.ngtszlong.eztrycloth.R;
 
-public class RegisterActivity extends AppCompatActivity {
 
+public class RegisterFragment extends Fragment {
     private FirebaseAuth fAuth;
     ProgressDialog progressDialog;
     Profile profile;
-    Toolbar toolbar;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
-        toolbar = findViewById(R.id.tb_register);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Register");
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_register, container, false);
+        getActivity().setTitle(getText(R.string.register));
 
         fAuth = FirebaseAuth.getInstance();
 
-        final EditText edt_email = findViewById(R.id.edt_email);
-        final EditText edt_pw = findViewById(R.id.edt_pw);
-        final EditText edt_pwc = findViewById(R.id.edt_pwc);
-        CardView btn_register = findViewById(R.id.btn_reg_register);
-        progressDialog = new ProgressDialog(this);
+        final EditText edt_email = view.findViewById(R.id.edt_email);
+        final EditText edt_pw = view.findViewById(R.id.edt_pw);
+        final EditText edt_pwc = view.findViewById(R.id.edt_pwc);
+        CardView btn_register = view.findViewById(R.id.btn_reg_register);
+        progressDialog = new ProgressDialog(getContext());
         profile = new Profile();
 
         if (fAuth.getCurrentUser() != null) {
-            Toast.makeText(this, "You have already login", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            finish();
+            Toast.makeText(getContext(), "You have already login", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(getActivity().getApplicationContext(), MainActivity.class));
+            getActivity().finish();
         }
 
         btn_register.setOnClickListener(new View.OnClickListener() {
@@ -96,9 +94,9 @@ public class RegisterActivity extends AppCompatActivity {
                                 DatabaseReference reference = database.getReference("Users");
                                 reference.child(uid).setValue(profile);
 
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                startActivity(new Intent(getActivity().getApplicationContext(), MainActivity.class));
                             } else {
-                                Toast.makeText(RegisterActivity.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
                                 System.out.println(task.getException().getMessage());
                             }
@@ -107,11 +105,6 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return super.onSupportNavigateUp();
+        return view;
     }
 }

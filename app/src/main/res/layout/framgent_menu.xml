@@ -22,21 +22,21 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checked="true"
-                android:text="ALL" />
+                android:text="@string/ALL" />
 
             <RadioButton
                 android:id="@+id/rb_men"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="MEN" />
+                android:text="@string/MEN" />
 
             <RadioButton
                 android:id="@+id/rb_women"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="WOMEN" />
+                android:text="@string/WOMEN" />
         </RadioGroup>
     </LinearLayout>
 

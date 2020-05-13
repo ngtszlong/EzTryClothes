@@ -1,6 +1,8 @@
 package com.ngtszlong.eztrycloth.menu;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +29,9 @@ import com.ngtszlong.eztrycloth.menu.list.ListItem;
 import com.ngtszlong.eztrycloth.menu.list.ListItemActivity;
 
 import java.util.ArrayList;
+import java.util.Locale;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class MenuFragment extends Fragment implements MenuAdapter.OnItemClickListener {
 
@@ -44,7 +49,8 @@ public class MenuFragment extends Fragment implements MenuAdapter.OnItemClickLis
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getActivity().setTitle("Please choose Clothes Type");
+        getActivity().setTitle(getString(R.string.PleasechooseClothesType));
+        LoadLocale();
         View view = inflater.inflate(R.layout.framgent_menu, container, false);
         recyclerView = view.findViewById(R.id.rv_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -115,5 +121,22 @@ public class MenuFragment extends Fragment implements MenuAdapter.OnItemClickLis
         Intent intent = new Intent(getActivity().getApplication(), ListItemActivity.class);
         intent.putExtra("clothtype", menuItem.getName());
         startActivity(intent);
+    }
+
+    private void setLocale(String lang) {
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+        SharedPreferences.Editor editor = getActivity().getSharedPreferences("Setting", MODE_PRIVATE).edit();
+        editor.putString("My_Lang", lang);
+        editor.apply();
+    }
+
+    public void LoadLocale() {
+        SharedPreferences preferences = getActivity().getSharedPreferences("Setting", MODE_PRIVATE);
+        String language = preferences.getString("My_Lang", "");
+        setLocale(language);
     }
 }

@@ -1,6 +1,8 @@
 package com.ngtszlong.eztrycloth.shoppingcart;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +32,9 @@ import com.ngtszlong.eztrycloth.menu.detail.DetailActivity;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapter.OnItemClickListener {
 
@@ -53,7 +58,8 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getActivity().setTitle("Shopping Cart");
+        getActivity().setTitle(getText(R.string.ShoppingCart));
+        LoadLocale();
         View view = inflater.inflate(R.layout.framgent_shoppingcart, container, false);
         cardView = view.findViewById(R.id.btn_shopcart);
 
@@ -153,5 +159,22 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
         Intent intent = new Intent(getActivity().getApplication(), DetailActivity.class);
         intent.putExtra("No", shoppingCart.getNo());
         startActivity(intent);
+    }
+
+    private void setLocale(String lang) {
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+        SharedPreferences.Editor editor = getActivity().getSharedPreferences("Setting", MODE_PRIVATE).edit();
+        editor.putString("My_Lang", lang);
+        editor.apply();
+    }
+
+    public void LoadLocale() {
+        SharedPreferences preferences = getActivity().getSharedPreferences("Setting", MODE_PRIVATE);
+        String language = preferences.getString("My_Lang", "");
+        setLocale(language);
     }
 }

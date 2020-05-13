@@ -18,18 +18,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="q">
-        <activity android:name=".setting.ChangePwActivity" />
         <activity
             android:name=".menu.list.ListItemActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".menu.detail.DetailActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".setting.register.RegisterActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".setting.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MainActivity"

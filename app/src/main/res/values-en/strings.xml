@@ -1,10 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">EzTryClothes</string>
-
-    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
-    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
-
-    <string name="type" translatable="false">Spinner</string>
     <string name="Color">Color :</string>
     <string name="Quantity">Quantity :</string>
     <string name="Material">Material :</string>
@@ -79,21 +75,7 @@
     <string name="PleasechooseClothesType">Please choose Clothes Type</string>
     <string name="profile">Your Profile</string>
     <string name="logininfirst">You need to login in first</string>
-    <string-array name="type">
-        <item>Hoodies</item>
-        <item>Shirt</item>
-        <item>T-Shirt</item>
-        <item>Dress</item>
-    </string-array>
-    <string-array name="men">
-        <item>Hoodies</item>
-        <item>Shirt</item>
-        <item>T-Shirt</item>
-    </string-array>
-    <string-array name="women">
-        <item>Dress</item>
-    </string-array>
     <string name="Help">Help</string>
-    <string name="Username">Username :</string>
-    <string name="PhoneNumber">Phone Number :</string>
+    <string name="Username">"Username : "</string>
+    <string name="PhoneNumber">"Phone Number : "</string>
 </resources>

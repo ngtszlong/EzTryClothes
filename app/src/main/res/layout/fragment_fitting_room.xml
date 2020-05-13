@@ -29,40 +29,11 @@
 
         <ImageButton
             android:id="@+id/imgbtn_bin"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:scaleType="fitXY"
             android:src="@drawable/ic_bin" />
 
-        <Button
-            android:id="@+id/btn_xl"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:text="XL" />
-
-        <Button
-            android:id="@+id/btn_l"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:text="L" />
-
-        <Button
-            android:id="@+id/btn_m"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:text="M" />
-
-        <Button
-            android:id="@+id/btn_s"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:text="S" />
-
-        <Button
-            android:id="@+id/btn_xs"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:text="XS" />
     </LinearLayout>
 
 

@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/gradient"
-    tools:context=".setting.register.RegisterActivity">
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/tb_register"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_marginBottom="20dp"
-        android:background="@color/main"
-        android:minHeight="?attr/actionBarSize"/>
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@drawable/gradient"
+    tools:context=".Register.RegisterFragment">
 
     <ImageView
         android:id="@+id/imageView"

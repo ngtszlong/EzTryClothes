@@ -3,6 +3,8 @@ package com.ngtszlong.eztrycloth.Profile;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -42,7 +44,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.ngtszlong.eztrycloth.setting.ChangePwActivity;
 import com.ngtszlong.eztrycloth.R;
 import com.squareup.picasso.Picasso;
 
@@ -51,8 +52,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
 
 public class ProfileFragment extends Fragment {
     private static final String TAG = "ProfileFragment";
@@ -79,11 +82,13 @@ public class ProfileFragment extends Fragment {
     RadioGroup rg_gender;
     RadioButton rb_male;
     RadioButton rb_female;
+    TextView txt_help;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getActivity().setTitle("Profile");
+        getActivity().setTitle(getString(R.string.profile));
+        LoadLocale();
         final View view = inflater.inflate(R.layout.framgent_profile, container, false);
         img_front = view.findViewById(R.id.img_mpro_front);
         img_side = view.findViewById(R.id.img_mpro_side);
@@ -97,9 +102,16 @@ public class ProfileFragment extends Fragment {
         rg_gender = view.findViewById(R.id.rg_mpro_gender);
         rb_male = view.findViewById(R.id.rb_mpro_male);
         rb_female = view.findViewById(R.id.rb_mpro_female);
+        txt_help = view.findViewById(R.id.txt_howtotakephoto);
         CardView btn_update = view.findViewById(R.id.btn_mpro_update);
-        CardView btn_change = view.findViewById(R.id.btn_mpro_changepw);
         getdata();
+
+        txt_help.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(getContext()).setView(R.layout.sample).show();
+            }
+        });
 
         btn_update.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,13 +123,6 @@ public class ProfileFragment extends Fragment {
                 }else{
                     updatedata();
                 }
-            }
-        });
-        btn_change.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ChangePwActivity.class);
-                startActivity(intent);
             }
         });
         dateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -388,5 +393,22 @@ public class ProfileFragment extends Fragment {
 
             }
         });
+    }
+
+    private void setLocale(String lang) {
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+        SharedPreferences.Editor editor = getActivity().getSharedPreferences("Setting", MODE_PRIVATE).edit();
+        editor.putString("My_Lang", lang);
+        editor.apply();
+    }
+
+    public void LoadLocale() {
+        SharedPreferences preferences = getActivity().getSharedPreferences("Setting", MODE_PRIVATE);
+        String language = preferences.getString("My_Lang", "");
+        setLocale(language);
     }
 }

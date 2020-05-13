@@ -38,7 +38,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="35dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -46,17 +45,35 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:text="Front photo"
-                android:textColor="#FFFFFF"
-                android:textAlignment="center" />
+                android:text="@string/Frontphoto"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:layout_width="100dp"
-                android:textColor="#FFFFFF"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="Side photo"
-                android:textAlignment="center" />
+                android:text="@string/Sidephoto"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="35dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txt_howtotakephoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@string/HowtoTakePhoto"
+                android:textAlignment="center"
+                android:textColor="#DC143C" />
         </LinearLayout>
 
 
@@ -72,20 +89,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <RadioButton
                     android:id="@+id/rb_mpro_male"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="40dp"
                     android:checked="true"
-                    android:text="Male"
+                    android:text="@string/Male"
                     android:textColor="#ffffff" />
 
                 <RadioButton
                     android:id="@+id/rb_mpro_female"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Female"
+                    android:text="@string/Female"
                     android:textColor="#ffffff" />
             </RadioGroup>
         </LinearLayout>
@@ -99,7 +117,7 @@
             android:layout_marginBottom="30dp"
             android:background="#11000000"
             android:drawableLeft="@drawable/ic_action_user"
-            android:hint="Display name"
+            android:hint="@string/Displayname"
             android:textColor="#FFFFFF"
             android:textColorHint="#FFFFFF"
             android:textSize="16dp" />
@@ -112,7 +130,7 @@
             android:layout_marginBottom="30dp"
             android:background="#11000000"
             android:drawableLeft="@drawable/ic_action_user"
-            android:hint="Phone number"
+            android:hint="@string/Phonenumber"
             android:maxLength="8"
             android:textColor="#FFFFFF"
             android:textColorHint="#FFFFFF"
@@ -127,7 +145,7 @@
             android:background="#11000000"
             android:drawableLeft="@drawable/ic_action_user"
             android:ems="10"
-            android:hint="Age"
+            android:hint="@string/Age"
             android:inputType="number"
             android:maxLength="2"
             android:textColor="#FFFFFF"
@@ -143,7 +161,7 @@
             android:layout_marginBottom="30dp"
             android:background="#11000000"
             android:drawableLeft="@drawable/ic_action_user"
-            android:hint="Height(150-200cm)"
+            android:hint="@string/Height"
             android:inputType="number"
             android:textColor="#FFFFFF"
             android:textColorHint="#FFFFFF"
@@ -157,7 +175,7 @@
             android:layout_marginBottom="30dp"
             android:background="#11000000"
             android:drawableLeft="@drawable/ic_action_user"
-            android:hint="Weight(KG)"
+            android:hint="@string/Weight"
             android:inputType="number"
             android:textColor="#FFFFFF"
             android:textColorHint="#FFFFFF"
@@ -173,7 +191,7 @@
             android:drawableStart="@drawable/ic_action_user"
             android:drawableLeft="@drawable/ic_action_user"
             android:gravity="center|left"
-            android:hint="Birth"
+            android:hint="@string/Birth"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
             android:textColorHint="#FFFFFF" />
@@ -188,7 +206,7 @@
             android:background="#11000000"
             android:drawableLeft="@drawable/ic_action_user"
             android:ems="10"
-            android:hint="Address"
+            android:hint="@string/Address"
             android:inputType="text"
             android:textColor="#FFFFFF"
             android:textColorHint="#FFFFFF"
@@ -212,31 +230,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="Update"
-                    android:textColor="#ffffff"
-                    android:textSize="18sp" />
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/btn_mpro_changepw"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="30dp"
-            app:cardBackgroundColor="@color/colorAccent"
-            app:cardCornerRadius="25dp"
-            app:cardElevation="10dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="Change password"
+                    android:text="@string/Update"
                     android:textColor="#ffffff"
                     android:textSize="18sp" />
             </RelativeLayout>

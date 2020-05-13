@@ -1,5 +1,7 @@
 package com.ngtszlong.eztrycloth.FittingRoom;
 
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -29,6 +31,9 @@ import com.ngtszlong.eztrycloth.shoppingcart.ShoppingCart;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Locale;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class FittingRoomFragment extends Fragment implements TryAdapter.OnItemClickListener {
     RecyclerView rv_clothes;
@@ -56,7 +61,8 @@ public class FittingRoomFragment extends Fragment implements TryAdapter.OnItemCl
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getActivity().setTitle("Fitting Room");
+        getActivity().setTitle(getText(R.string.FittingRoom));
+        LoadLocale();
         View v = inflater.inflate(R.layout.fragment_fitting_room, container, false);
 
         rv_clothes = v.findViewById(R.id.rv_clothes);
@@ -93,14 +99,11 @@ public class FittingRoomFragment extends Fragment implements TryAdapter.OnItemCl
         mainlayout = (RelativeLayout) v.findViewById(R.id.rl_background);
 
         bin = v.findViewById(R.id.imgbtn_bin);
-        btnxl = v.findViewById(R.id.btn_xl);
-        btnl = v.findViewById(R.id.btn_l);
-        btnm = v.findViewById(R.id.btn_m);
-        btns = v.findViewById(R.id.btn_s);
-        btnxs = v.findViewById(R.id.btn_xs);
-
         return v;
     }
+
+
+
 
     private void getImage() {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -159,9 +162,26 @@ public class FittingRoomFragment extends Fragment implements TryAdapter.OnItemCl
     public void onItemClick(int position) {
         ShoppingCart shoppingCart = shoppingCartArrayList.get(position);
         ImageView imageView = new ImageView(getContext());
-        Picasso.get().load(shoppingCart.getImage()).into(imageView);
+        Picasso.get().load(shoppingCart.getTryimage()).into(imageView);
         imageView.setOnTouchListener(onTouchListener());
-        imageView.setLayoutParams(new RelativeLayout.LayoutParams(400, 400));
+        imageView.setLayoutParams(new RelativeLayout.LayoutParams(610, 610));
         relativeLayout.addView(imageView);
+    }
+
+    private void setLocale(String lang) {
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+        SharedPreferences.Editor editor = getActivity().getSharedPreferences("Setting", MODE_PRIVATE).edit();
+        editor.putString("My_Lang", lang);
+        editor.apply();
+    }
+
+    public void LoadLocale() {
+        SharedPreferences preferences = getActivity().getSharedPreferences("Setting", MODE_PRIVATE);
+        String language = preferences.getString("My_Lang", "");
+        setLocale(language);
     }
 }

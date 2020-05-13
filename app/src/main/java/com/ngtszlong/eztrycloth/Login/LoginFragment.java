@@ -1,15 +1,17 @@
-package com.ngtszlong.eztrycloth.setting;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
+package com.ngtszlong.eztrycloth.Login;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -20,27 +22,20 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.ngtszlong.eztrycloth.MainActivity;
 import com.ngtszlong.eztrycloth.R;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginFragment extends Fragment {
     private FirebaseAuth fAuth;
     ProgressDialog progressDialog;
 
-    Toolbar tb_login;
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        tb_login = findViewById(R.id.tb_login);
-        setSupportActionBar(tb_login);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Login");
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
+        getActivity().setTitle(getText(R.string.Login));
         fAuth = FirebaseAuth.getInstance();
 
-        CardView btn_login = findViewById(R.id.btn_login);
-        final EditText edt_email = findViewById(R.id.edt_login_email);
-        final EditText edt_pw = findViewById(R.id.edt_login_pw);
-        progressDialog = new ProgressDialog(this);
+        CardView btn_login = view.findViewById(R.id.btn_login);
+        final EditText edt_email = view.findViewById(R.id.edt_login_email);
+        final EditText edt_pw = view.findViewById(R.id.edt_login_pw);
+        progressDialog = new ProgressDialog(getContext());
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,11 +61,11 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             progressDialog.dismiss();
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            Intent intent = new Intent(getContext(), MainActivity.class);
                             startActivity(intent);
-                            finish();
+                            getActivity().finish();
                         } else {
-                            Toast.makeText(LoginActivity.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
                             System.out.println(task.getException().getMessage());
                         }
@@ -78,11 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
-    }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return super.onSupportNavigateUp();
+        return view;
     }
 }

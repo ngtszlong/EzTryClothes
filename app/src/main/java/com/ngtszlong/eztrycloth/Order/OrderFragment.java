@@ -1,5 +1,7 @@
 package com.ngtszlong.eztrycloth.Order;
 
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,6 +23,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.ngtszlong.eztrycloth.R;
 
 import java.util.ArrayList;
+import java.util.Locale;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class OrderFragment extends Fragment {
     public static ArrayList<Order> orderArrayList;
@@ -31,7 +36,8 @@ public class OrderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order, container, false);
-        getActivity().setTitle("Purchase History");
+        getActivity().setTitle(getText(R.string.PurchaseHistory));
+        LoadLocale();
 
         recyclerView = view.findViewById(R.id.rv_order);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -58,5 +64,22 @@ public class OrderFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    private void setLocale(String lang) {
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+        SharedPreferences.Editor editor = getActivity().getSharedPreferences("Setting", MODE_PRIVATE).edit();
+        editor.putString("My_Lang", lang);
+        editor.apply();
+    }
+
+    public void LoadLocale() {
+        SharedPreferences preferences = getActivity().getSharedPreferences("Setting", MODE_PRIVATE);
+        String language = preferences.getString("My_Lang", "");
+        setLocale(language);
     }
 }

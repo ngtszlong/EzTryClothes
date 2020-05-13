@@ -1,8 +1,12 @@
 package com.ngtszlong.eztrycloth;
 
 import android.Manifest;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -31,13 +36,15 @@ import com.ngtszlong.eztrycloth.Measure.MeasureFragment;
 import com.ngtszlong.eztrycloth.Order.OrderFragment;
 import com.ngtszlong.eztrycloth.Profile.ProfileFragment;
 import com.ngtszlong.eztrycloth.menu.MenuFragment;
-import com.ngtszlong.eztrycloth.setting.SettingFragment;
+import com.ngtszlong.eztrycloth.Login.LoginFragment;
+import com.ngtszlong.eztrycloth.Register.RegisterFragment;
 import com.ngtszlong.eztrycloth.Profile.Profile;
 import com.ngtszlong.eztrycloth.shoppingcart.ShoppingCartFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -52,25 +59,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String username;
     String phonenumber;
     ImageView image;
-    SharedPreferences sharedPreferences;
-    boolean aBoolean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        LoadLocale();
+        SharedPreferences pref = getSharedPreferences("prefs", MODE_PRIVATE);
+        boolean firststart = pref.getBoolean("firstStart", true);
+        if (firststart) {
+            showStartDialog();
+        }
         checkPermission();
-        /*SharedPreferences.Editor editor = getSharedPreferences("profiledata", MODE_PRIVATE).edit();
-        editor.putBoolean("info", false);
-        editor.apply();
-        sharedPreferences = getSharedPreferences("profiledata", MODE_PRIVATE);
-        aBoolean = sharedPreferences.getBoolean("info", false);*/
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_main);
 
         firebaseAuth = FirebaseAuth.getInstance();
-
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -78,6 +80,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         phone = headerView.findViewById(R.id.header_phone);
         name = headerView.findViewById(R.id.header_name);
         image = headerView.findViewById(R.id.header_image);
+
+        Menu menu = navigationView.getMenu();
+        if (firebaseAuth.getCurrentUser() != null){
+            for (int i=0;i< menu.findItem(R.id.nav_help).getSubMenu().size();i++){
+                if (menu.findItem(R.id.nav_help).getSubMenu().getItem(i).getItemId() == R.id.nav_login){
+                    menu.findItem(R.id.nav_help).getSubMenu().getItem(i).setVisible(false);
+                }
+                if (menu.findItem(R.id.nav_help).getSubMenu().getItem(i).getItemId() == R.id.nav_register){
+                    menu.findItem(R.id.nav_help).getSubMenu().getItem(i).setVisible(false);
+                }
+            }
+        }else {
+            firebaseAuth.getCurrentUser();
+            for (int i=0;i< menu.findItem(R.id.nav_help).getSubMenu().size();i++){
+                if (menu.findItem(R.id.nav_help).getSubMenu().getItem(i).getItemId() == R.id.nav_logout){
+                    menu.findItem(R.id.nav_help).getSubMenu().getItem(i).setVisible(false);
+                }
+            }
+        }
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -88,6 +111,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigationView.setCheckedItem(R.id.nav_menu);
         }
         setHeaderInfo();
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.setting_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case R.id.Chinese:
+                setLocale("zh");
+                finish();
+                startActivity(new Intent(this, MainActivity.class));
+                break;
+            case R.id.English:
+                setLocale("en");
+                finish();
+                startActivity(new Intent(this, MainActivity.class));
+                break;
+        }
+        return true;
     }
 
     public void setHeaderInfo() {
@@ -105,12 +153,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             username = String.valueOf(profile.getName());
                             phonenumber = String.valueOf(profile.getPhone());
                             if (!username.isEmpty()) {
-                                name.setText("Username : " + username);
+                                name.setText(getText(R.string.Username) + username);
                             } else {
                                 name.setText("You need to complete your profile");
                             }
                             if (!phonenumber.isEmpty()) {
-                                phone.setText("Phone number : " + phonenumber);
+                                phone.setText(getText(R.string.PhoneNumber) + phonenumber);
                             } else {
                                 phone.setText("You need to complete your profile");
                             }
@@ -135,41 +183,50 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_straighten:
                 if (firebaseAuth.getCurrentUser() == null) {
-                    Toast.makeText(this, "You need to login in Setting first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.logininfirst, Toast.LENGTH_SHORT).show();
                 } else {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MeasureFragment()).commit();
                 }
                 break;
             case R.id.nav_fitting:
                 if (firebaseAuth.getCurrentUser() == null) {
-                    Toast.makeText(this, "You need to login in Setting first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.logininfirst, Toast.LENGTH_SHORT).show();
                 } else {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FittingRoomFragment()).commit();
                 }
                 break;
             case R.id.nav_shoppingCart:
                 if (firebaseAuth.getCurrentUser() == null) {
-                    Toast.makeText(this, "You need to login in Setting first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.logininfirst, Toast.LENGTH_SHORT).show();
                 } else {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ShoppingCartFragment()).commit();
                 }
                 break;
             case R.id.nav_order:
                 if (firebaseAuth.getCurrentUser() == null) {
-                    Toast.makeText(this, "You need to login in Setting first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.logininfirst, Toast.LENGTH_SHORT).show();
                 } else {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new OrderFragment()).commit();
                 }
                 break;
             case R.id.nav_profile:
                 if (firebaseAuth.getCurrentUser() == null) {
-                    Toast.makeText(this, "You need to login in Setting first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.logininfirst, Toast.LENGTH_SHORT).show();
                 } else {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
                 }
                 break;
-            case R.id.nav_setting:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingFragment()).commit();
+            case R.id.nav_login:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new LoginFragment()).commit();
+                break;
+            case R.id.nav_logout:
+                firebaseAuth.signOut();
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                break;
+            case R.id.nav_register:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RegisterFragment()).commit();
                 break;
         }
 
@@ -198,5 +255,55 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
         TedPermission.with(MainActivity.this).setPermissionListener(permissionListener).setPermissions(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE).setGotoSettingButton(true).check();
+    }
+
+    private void showStartDialog() {
+        final String[] listItems = {"中文", "English"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this).setTitle("選擇語言 Choose Language");
+        builder.setCancelable(false);
+        builder.setSingleChoiceItems(listItems, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0) {
+                    setLocale("zh");
+                    finish();
+                    startActivity(new Intent(MainActivity.this, MainActivity.class));
+                    firststart();
+                }
+                if (which == 1) {
+                    setLocale("en");
+                    finish();
+                    startActivity(new Intent(MainActivity.this, MainActivity.class));
+                    firststart();
+                }
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void firststart() {
+        SharedPreferences pref = getSharedPreferences("prefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putBoolean("firstStart", false);
+        editor.apply();
+    }
+
+    private void setLocale(String lang) {
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        SharedPreferences.Editor editor = getSharedPreferences("Setting", MODE_PRIVATE).edit();
+        editor.putString("My_Lang", lang);
+        editor.apply();
+    }
+
+    public void LoadLocale() {
+        SharedPreferences preferences = getSharedPreferences("Setting", MODE_PRIVATE);
+        String language = preferences.getString("My_Lang", "");
+        setLocale(language);
     }
 }

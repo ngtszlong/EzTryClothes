@@ -20,7 +20,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginBottom="15dp"
-                android:text="Measurements"
+                android:text="@string/Measurements"
                 android:textSize="30dp" />
 
             <LinearLayout
@@ -34,7 +34,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Bust girth : "
+                    android:text="@string/Bustgirth"
                     android:textSize="25dp" />
 
                 <TextView
@@ -55,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Waist girth : "
+                    android:text="@string/Waistgirth"
                     android:textSize="25dp" />
 
                 <TextView
@@ -76,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Hip girth : "
+                    android:text="@string/Hipgirth"
                     android:textSize="25dp" />
 
                 <TextView
@@ -97,7 +97,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Back neck height : "
+                    android:text="@string/Backneckheight"
                     android:textSize="25dp" />
 
                 <TextView
@@ -119,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginBottom="15dp"
-                android:text="Upper body"
+                android:text="@string/Upperbody"
                 android:textSize="30dp" />
 
             <LinearLayout
@@ -133,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Neck to upper hip length : "
+                    android:text="@string/Necktoupperhiplength"
                     android:textSize="25dp" />
 
                 <TextView
@@ -154,7 +154,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Front shoulder width : "
+                    android:text="@string/Frontshoulderwidth"
                     android:textSize="25dp" />
 
                 <TextView
@@ -175,7 +175,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Across back shoulder width : "
+                    android:text="@string/Acrossbackshoulderwidth"
                     android:textSize="25dp" />
 
                 <TextView
@@ -196,7 +196,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Across back width : "
+                    android:text="@string/Acrossbackwidth"
                     android:textSize="25dp" />
 
                 <TextView
@@ -217,7 +217,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Shoulder length : "
+                    android:text="@string/Shoulderlength"
                     android:textSize="25dp" />
 
                 <TextView
@@ -238,7 +238,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Chest width : "
+                    android:text="@string/Chestwidth"
                     android:textSize="25dp" />
 
                 <TextView
@@ -259,7 +259,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Under bust girth : "
+                    android:text="@string/Underbustgirth"
                     android:textSize="25dp" />
 
                 <TextView
@@ -280,7 +280,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Upper chest girth : "
+                    android:text="@string/Upperchestgirth"
                     android:textSize="25dp" />
 
                 <TextView
@@ -301,7 +301,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Abdomen girth : "
+                    android:text="@string/Abdomengirth"
                     android:textSize="25dp" />
 
                 <TextView
@@ -322,7 +322,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Back shoulder width : "
+                    android:text="@string/Backshoulderwidth"
                     android:textSize="25dp" />
 
                 <TextView
@@ -343,7 +343,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Neck girth : "
+                    android:text="@string/Neckgirth"
                     android:textSize="25dp" />
 
                 <TextView
@@ -364,7 +364,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Upper-arm girth : "
+                    android:text="@string/Upperarmgirth"
                     android:textSize="25dp" />
 
                 <TextView
@@ -385,7 +385,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Outer arm length : "
+                    android:text="@string/Outerarmlength"
                     android:textSize="25dp" />
 
                 <TextView
@@ -406,7 +406,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Jacket length : "
+                    android:text="@string/Jacketlength"
                     android:textSize="25dp" />
 
                 <TextView
@@ -427,7 +427,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Torso height : "
+                    android:text="@string/Torsoheight"
                     android:textSize="25dp" />
 
                 <TextView
@@ -448,7 +448,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Back neck to hip length : "
+                    android:text="@string/Backnecktohiplength"
                     android:textSize="25dp" />
 
                 <TextView
@@ -469,7 +469,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Waist breadth : "
+                    android:text="@string/Waistbreadth"
                     android:textSize="25dp" />
 
                 <TextView
@@ -491,7 +491,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginBottom="15dp"
-                android:text="Lower body"
+                android:text="@string/Lowerbody"
                 android:textSize="30dp" />
 
             <LinearLayout
@@ -505,7 +505,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Thigh girth : "
+                    android:text="@string/Thighgirth"
                     android:textSize="25dp" />
 
                 <TextView
@@ -526,7 +526,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Hip height : "
+                    android:text="@string/Hipheight"
                     android:textSize="25dp" />
 
                 <TextView
@@ -547,7 +547,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Inside leg height : "
+                    android:text="@string/Insidelegheight"
                     android:textSize="25dp" />
 
                 <TextView
@@ -568,7 +568,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Upper hip height : "
+                    android:text="@string/Upperhipheight"
                     android:textSize="25dp" />
 
                 <TextView

@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:paddingRight="20dp"
-            android:text="login for further detail"
+            android:text="@string/loginforfurtherdetail"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
         <TextView
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:paddingRight="20dp"
-            android:text="login at the setting page"
+            android:text="@string/loginatthesettingpage"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
     </LinearLayout>
 </LinearLayout>

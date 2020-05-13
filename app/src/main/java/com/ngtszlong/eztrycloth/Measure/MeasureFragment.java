@@ -3,6 +3,7 @@ package com.ngtszlong.eztrycloth.Measure;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -43,11 +44,14 @@ import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class MeasureFragment extends Fragment {
     private String url = "https://saia.3dlook.me/api/v2/persons/?measurements_type=all";
-    private String key = "APIKey b6436e71e31412d46eea2b6cf76d3c8dbe1067bf";
+    private String key = "APIKey b116dc1b90b7a485f53d349d20c814dc5e90c120";
 
     private FirebaseUser firebaseUser;
     private FirebaseAuth firebaseAuth;
@@ -88,13 +92,13 @@ public class MeasureFragment extends Fragment {
     private TextView txt_Upperhipheight;
     private TextView txt_Thighgirth;
     private String id;
-    ProgressDialog dialog;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.framgent_measure, container, false);
-        getActivity().setTitle("Measurement");
+        LoadLocale();
+        getActivity().setTitle(getText(R.string.YourMeasurement));
         initialize(view);
         queue = Volley.newRequestQueue(getContext());
         getdata();
@@ -145,7 +149,7 @@ public class MeasureFragment extends Fragment {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    id = String.valueOf(response.getJSONObject("id"));
+                    id = response.getString("id");
                     firebaseDatabase = FirebaseDatabase.getInstance();
                     databaseReference = firebaseDatabase.getReference().child("Users");
                     databaseReference.addValueEventListener(new ValueEventListener() {
@@ -317,5 +321,22 @@ public class MeasureFragment extends Fragment {
             e.printStackTrace();
         }
         return base64;
+    }
+
+    private void setLocale(String lang) {
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+        SharedPreferences.Editor editor = getActivity().getSharedPreferences("Setting", MODE_PRIVATE).edit();
+        editor.putString("My_Lang", lang);
+        editor.apply();
+    }
+
+    public void LoadLocale() {
+        SharedPreferences preferences = getActivity().getSharedPreferences("Setting", MODE_PRIVATE);
+        String language = preferences.getString("My_Lang", "");
+        setLocale(language);
     }
 }
