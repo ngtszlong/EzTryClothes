@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.AuthFailureError;
@@ -80,6 +81,8 @@ public class MeasureFragment extends Fragment {
 
     ProgressDialog progressDialog;
 
+    TextView txt_sizeguide;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -87,8 +90,15 @@ public class MeasureFragment extends Fragment {
         LoadLocale();
         getActivity().setTitle(getText(R.string.YourMeasurement));
         progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("Getting Data, Please wait...");
+        progressDialog.setMessage(getText(R.string.GettingData));
         progressDialog.show();
+        txt_sizeguide = view.findViewById(R.id.txt_help);
+        txt_sizeguide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(getContext()).setView(R.layout.sizeguide).show();
+            }
+        });
         initialize(view);
         queue = Volley.newRequestQueue(getContext());
         getdata();

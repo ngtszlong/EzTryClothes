@@ -78,6 +78,14 @@
     <string name="profile">你的用戶資料</string>
     <string name="Username">用戶名稱 :</string>
     <string name="PhoneNumber">電話 :</string>
+    <string name="Menstopsizechart">男子上裝尺碼表</string>
+    <string name="Womenstopsizechart">女子上裝尺碼表</string>
+    <string name="Systemsize">系統尺碼</string>
+    <string name="Length">衣長</string>
+    <string name="Bust">胸圍</string>
+    <string name="Shoulderwidth">肩寬</string>
+    <string name="Waistline">腰圍</string>
+    <string name="GettingData">正在取得數據，請稍候...</string>
     <string-array name="type">
         <item>連帽衫</item>
         <item>襯衫</item>
@@ -92,4 +100,5 @@
     <string-array name="women">
         <item>連衣裙</item>
     </string-array>
+    <string name="SizeGuide">尺碼指南</string>
 </resources>

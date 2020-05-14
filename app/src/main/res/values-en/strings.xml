@@ -78,6 +78,14 @@
     <string name="Help">Help</string>
     <string name="Username">"Username : "</string>
     <string name="PhoneNumber">"Phone Number : "</string>
+    <string name="Menstopsizechart">Men\'s top size chart</string>
+    <string name="Womenstopsizechart">Women\'s top size chart</string>
+    <string name="Systemsize">System size</string>
+    <string name="Length">Length</string>
+    <string name="Bust">Bust</string>
+    <string name="Shoulderwidth">Shoulder width</string>
+    <string name="Waistline">Waistline</string>
+    <string name="GettingData">Getting Data, Please wait...</string>
     <string-array name="type">
         <item>Hoodies</item>
         <item>Shirt</item>
@@ -92,4 +100,5 @@
     <string-array name="women">
         <item>Dress</item>
     </string-array>
+    <string name="SizeGuide">Size Guide</string>
 </resources>
