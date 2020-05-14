@@ -12,8 +12,9 @@ public class Order {
     private String str;
     private String date;
     private String address;
+    private String customername;
 
-    public Order(String companyuid, String uid, String no, String image, String name, String quantity, String price, String discount, String str, String date, String address) {
+    public Order(String companyuid, String uid, String no, String image, String name, String quantity, String price, String discount, String str, String date, String address, String customername) {
         this.companyuid = companyuid;
         this.uid = uid;
         this.no = no;
@@ -25,6 +26,7 @@ public class Order {
         this.str = str;
         this.date = date;
         this.address = address;
+        this.customername = customername;
     }
 
     public Order() {
@@ -116,5 +118,13 @@ public class Order {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getCustomername() {
+        return customername;
+    }
+
+    public void setCustomername(String customername) {
+        this.customername = customername;
     }
 }

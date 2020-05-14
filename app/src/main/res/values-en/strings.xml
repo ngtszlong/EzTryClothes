@@ -38,7 +38,7 @@
     <string name="Thighgirth">Thigh girth :</string>
     <string name="Hipheight">Hip height :</string>
     <string name="Insidelegheight">Inside leg height :</string>
-    <string name="Upperhipheight">Upper hip height :</string>
+    <string name="Upperhipgirth">Upper hip Girth :</string>
     <string name="ALL">ALL</string>
     <string name="MEN">MEN</string>
     <string name="WOMEN">WOMEN</string>
@@ -78,4 +78,18 @@
     <string name="Help">Help</string>
     <string name="Username">"Username : "</string>
     <string name="PhoneNumber">"Phone Number : "</string>
+    <string-array name="type">
+        <item>Hoodies</item>
+        <item>Shirt</item>
+        <item>T-Shirt</item>
+        <item>Dress</item>
+    </string-array>
+    <string-array name="men">
+        <item>Hoodies</item>
+        <item>Shirt</item>
+        <item>T-Shirt</item>
+    </string-array>
+    <string-array name="women">
+        <item>Dress</item>
+    </string-array>
 </resources>

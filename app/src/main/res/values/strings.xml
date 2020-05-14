@@ -19,6 +19,7 @@
     <string name="Bustgirth">Bust girth :</string>
     <string name="Waistgirth">Waist girth :</string>
     <string name="Hipgirth">Hip girth :</string>
+
     <string name="Backneckheight">Back neck height :</string>
     <string name="Upperbody">Upper body</string>
     <string name="Necktoupperhiplength">Neck to upper hip length :</string>
@@ -42,7 +43,7 @@
     <string name="Thighgirth">Thigh girth :</string>
     <string name="Hipheight">Hip height :</string>
     <string name="Insidelegheight">Inside leg height :</string>
-    <string name="Upperhipheight">Upper hip height :</string>
+    <string name="Upperhipgirth">Upper hip girth :</string>
     <string name="ALL">ALL</string>
     <string name="MEN">MEN</string>
     <string name="WOMEN">WOMEN</string>

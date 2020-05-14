@@ -54,6 +54,8 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
     String str;
 
     String address;
+    String name;
+    double total = 0;
 
     @Nullable
     @Override
@@ -94,13 +96,31 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
         });
         reference.keepSynced(true);
 
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                    Profile profile = dataSnapshot1.getValue(Profile.class);
+                    if (profile.getUid().equals(user.getUid())){
+                        address = profile.getAddress();
+                        name = profile.getName();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getcurrenttime();
                 final String uid = user.getUid();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference reference = database.getReference("PurchaseOrder");
                 for (int i = 0; i < shoppingCartArrayList.size(); i++) {
                     if (!shoppingCartArrayList.get(i).getQuantity().equals("0")) {
                         order.setCompanyuid(shoppingCartArrayList.get(i).getCompanyuid());
@@ -113,26 +133,11 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
                         order.setPrice(shoppingCartArrayList.get(i).getPrice());
                         order.setQuantity(shoppingCartArrayList.get(i).getQuantity());
                         order.setNo(shoppingCartArrayList.get(i).getNo());
-                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users");
-                        databaseReference.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                                    Profile profile = dataSnapshot1.getValue(Profile.class);
-                                    if (profile.getUid().equals(uid)){
-                                        address = profile.getAddress();
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
+                        total = total + Double.parseDouble(shoppingCartArrayList.get(i).getPrice()) * Double.parseDouble(shoppingCartArrayList.get(i).getQuantity());
                         order.setAddress(address);
+                        order.setCustomername(name);
 
-                        reference.child(uid).child("Order"+str).child(String.valueOf(i)).setValue(order);
+                        database.getReference("PurchaseOrder").child(uid).child("Order"+str).child(String.valueOf(i)).setValue(order);
 
                         DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("ShoppingCart").child(user.getUid()).child(shoppingCartArrayList.get(i).getStr());
                         databaseReference1.removeValue();

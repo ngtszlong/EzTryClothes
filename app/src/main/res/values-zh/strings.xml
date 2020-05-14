@@ -38,7 +38,7 @@
     <string name="Thighgirth">大腿圍 :</string>
     <string name="Hipheight">臀部的高度 :</string>
     <string name="Insidelegheight">內腿高度 :</string>
-    <string name="Upperhipheight">上臀高 :</string>
+    <string name="Upperhipgirth">上臀圍 :</string>
     <string name="ALL">全部</string>
     <string name="MEN">男裝</string>
     <string name="WOMEN">女裝</string>
@@ -78,4 +78,18 @@
     <string name="profile">你的用戶資料</string>
     <string name="Username">用戶名稱 :</string>
     <string name="PhoneNumber">電話 :</string>
+    <string-array name="type">
+        <item>連帽衫</item>
+        <item>襯衫</item>
+        <item>上衣</item>
+        <item>連衣裙</item>
+    </string-array>
+    <string-array name="men">
+        <item>連帽衫</item>
+        <item>襯衫</item>
+        <item>上衣</item>
+    </string-array>
+    <string-array name="women">
+        <item>連衣裙</item>
+    </string-array>
 </resources>

@@ -8,34 +8,15 @@
         android:id="@+id/rl_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:layout_above="@+id/rv_clothes">
+        android:layout_above="@+id/rv_clothes"
+        android:gravity="center">
 
         <ImageView
             android:id="@+id/img_background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:src="@drawable/test" />
     </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/rv_clothes"
-        android:layout_alignParentRight="true"
-        android:layout_centerHorizontal="true"
-        android:orientation="vertical">
-
-        <ImageButton
-            android:id="@+id/imgbtn_bin"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_bin" />
-
-    </LinearLayout>
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_clothes"

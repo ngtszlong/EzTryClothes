@@ -3,6 +3,7 @@ package com.ngtszlong.eztrycloth.menu;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatDrawableManager;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -62,13 +64,7 @@ public class MenuFragment extends Fragment implements MenuAdapter.OnItemClickLis
         rg_type = view.findViewById(R.id.rg_type);
 
         type = getResources().getStringArray(R.array.type);
-        for (int i = 0; i< type.length; i++){
-            menuItems.add(new MenuItem(type[i], R.drawable.noimage));
-        }
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-        menuAdapter = new MenuAdapter(getActivity(), menuItems);
-        recyclerView.setAdapter(menuAdapter);
-        menuAdapter.setOnItemClickListener(MenuFragment.this);
+        check(type);
 
 
         rg_type.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -77,42 +73,37 @@ public class MenuFragment extends Fragment implements MenuAdapter.OnItemClickLis
                 if (rb_all.getId() == checkedId){
                     menuItems.clear();
                     type = getResources().getStringArray(R.array.type);
-                    for (int i = 0; i< type.length; i++){
-                        menuItems.add(new MenuItem(type[i], R.drawable.noimage));
-                    }
-                    recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-                    menuAdapter = new MenuAdapter(getActivity(), menuItems);
-                    recyclerView.setAdapter(menuAdapter);
-                    menuAdapter.setOnItemClickListener(MenuFragment.this);
+                    check(type);
                 }else if (rb_men.getId() == checkedId){
                     menuItems.clear();
                     type = getResources().getStringArray(R.array.men);
-                    for (int i = 0; i< type.length; i++){
-                        menuItems.add(new MenuItem(type[i], R.drawable.noimage));
-                    }
-                    recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-                    menuAdapter = new MenuAdapter(getActivity(), menuItems);
-                    recyclerView.setAdapter(menuAdapter);
-                    menuAdapter.setOnItemClickListener(MenuFragment.this);
+                    check(type);
                 }else if (rb_women.getId() == checkedId){
                     menuItems.clear();
                     type = getResources().getStringArray(R.array.women);
-                    for (int i = 0; i< type.length; i++){
-                        menuItems.add(new MenuItem(type[i], R.drawable.noimage));
-                    }
-                    recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-                    menuAdapter = new MenuAdapter(getActivity(), menuItems);
-                    recyclerView.setAdapter(menuAdapter);
-                    menuAdapter.setOnItemClickListener(MenuFragment.this);
+                    check(type);
                 }
             }
         });
-        /*menuItems.add(new MenuItem("jacket", R.drawable.jacket));
-        menuItems.add(new MenuItem("HOODIE ", R.drawable.hoodies));
-        menuItems.add(new MenuItem("Shirt", R.drawable.shirt));
-        menuItems.add(new MenuItem("PANTS", R.drawable.pants));
-        menuItems.add(new MenuItem("Polo", R.drawable.polo));*/
         return view;
+    }
+
+    private void check(String[] type) {
+        for (int i = 0; i< type.length; i++){
+            if (type[i].equals("Hoodies") || type[i].equals("連帽衫")){
+                menuItems.add(new MenuItem(type[i], R.drawable.hoodies));
+            }else if (type[i].equals("Shirt") || type[i].equals("襯衫")){
+                menuItems.add(new MenuItem(type[i], R.drawable.shirt));
+            }else if (type[i].equals("T-Shirt") || type[i].equals("上衣")){
+                menuItems.add(new MenuItem(type[i], R.drawable.tshirt));
+            }else if (type[i].equals("Dress") || type[i].equals("連衣裙")){
+                menuItems.add(new MenuItem(type[i], R.drawable.dress));
+            }
+        }
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        menuAdapter = new MenuAdapter(getActivity(), menuItems);
+        recyclerView.setAdapter(menuAdapter);
+        menuAdapter.setOnItemClickListener(MenuFragment.this);
     }
 
     @Override
@@ -139,4 +130,6 @@ public class MenuFragment extends Fragment implements MenuAdapter.OnItemClickLis
         String language = preferences.getString("My_Lang", "");
         setLocale(language);
     }
+
+
 }

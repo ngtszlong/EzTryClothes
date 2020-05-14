@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +21,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -42,7 +46,6 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -51,7 +54,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class MeasureFragment extends Fragment {
     private String url = "https://saia.3dlook.me/api/v2/persons/?measurements_type=all";
-    private String key = "APIKey b116dc1b90b7a485f53d349d20c814dc5e90c120";
+    private String key = "APIKey 93bb8c48e5289c0f4feda4ff48a647e3e8465372";
 
     private FirebaseUser firebaseUser;
     private FirebaseAuth firebaseAuth;
@@ -69,29 +72,13 @@ public class MeasureFragment extends Fragment {
     private TextView txt_Bustgirth;
     private TextView txt_Waistgirth;
     private TextView txt_Hipgirth;
-    private TextView txt_Backneckheight;
     private TextView txt_Necktoupperhiplength;
     private TextView txt_Frontshoulderwidth;
-    private TextView txt_Acrossbackshoulderwidth;
-    private TextView txt_Acrossbackwidth;
-    private TextView txt_Shoulderlength;
-    private TextView txt_Chestwidth;
-    private TextView txt_Underbustgirth;
-    private TextView txt_Upperchestgirth;
-    private TextView txt_Abdomengirth;
-    private TextView txt_Backshoulderwidth;
-    private TextView txt_Neckgirth;
-    private TextView txt_Upperarmgirth;
-    private TextView txt_Outerarmlength;
-    private TextView txt_Jacketlength;
-    private TextView txt_Torsoheight;
-    private TextView txt_Backnecktohiplength;
-    private TextView txt_Waistbreadth;
-    private TextView txt_Hipheight;
     private TextView txt_Insidelegheight;
-    private TextView txt_Upperhipheight;
-    private TextView txt_Thighgirth;
+    private TextView txt_Upperhipgirth;
     private String id;
+
+    ProgressDialog progressDialog;
 
     @Nullable
     @Override
@@ -99,6 +86,9 @@ public class MeasureFragment extends Fragment {
         View view = inflater.inflate(R.layout.framgent_measure, container, false);
         LoadLocale();
         getActivity().setTitle(getText(R.string.YourMeasurement));
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Getting Data, Please wait...");
+        progressDialog.show();
         initialize(view);
         queue = Volley.newRequestQueue(getContext());
         getdata();
@@ -109,32 +99,15 @@ public class MeasureFragment extends Fragment {
         txt_Bustgirth = view.findViewById(R.id.txt_Bustgirth);
         txt_Waistgirth = view.findViewById(R.id.txt_Waistgirth);
         txt_Hipgirth = view.findViewById(R.id.txt_Hipgirth);
-        txt_Backneckheight = view.findViewById(R.id.txt_Backneckheight);
         txt_Necktoupperhiplength = view.findViewById(R.id.txt_Necktoupperhiplength);
         txt_Frontshoulderwidth = view.findViewById(R.id.txt_Frontshoulderwidth);
-        txt_Acrossbackshoulderwidth = view.findViewById(R.id.txt_Acrossbackshoulderwidth);
-        txt_Acrossbackwidth = view.findViewById(R.id.txt_Acrossbackwidth);
-        txt_Shoulderlength = view.findViewById(R.id.txt_Shoulderlength);
-        txt_Chestwidth = view.findViewById(R.id.txt_Chestwidth);
-        txt_Underbustgirth = view.findViewById(R.id.txt_Underbustgirth);
-        txt_Upperchestgirth = view.findViewById(R.id.txt_Upperchestgirth);
-        txt_Abdomengirth = view.findViewById(R.id.txt_Abdomengirth);
-        txt_Backshoulderwidth = view.findViewById(R.id.txt_Backshoulderwidth);
-        txt_Neckgirth = view.findViewById(R.id.txt_Neckgirth);
-        txt_Upperarmgirth = view.findViewById(R.id.txt_Upperarmgirth);
-        txt_Outerarmlength = view.findViewById(R.id.txt_Outerarmlength);
-        txt_Jacketlength = view.findViewById(R.id.txt_Jacketlength);
-        txt_Torsoheight = view.findViewById(R.id.txt_Torsoheight);
-        txt_Backnecktohiplength = view.findViewById(R.id.txt_Backnecktohiplength);
-        txt_Waistbreadth = view.findViewById(R.id.txt_Waistbreadth);
-        txt_Hipheight = view.findViewById(R.id.txt_Hipheight);
         txt_Insidelegheight = view.findViewById(R.id.txt_Insidelegheight);
-        txt_Upperhipheight = view.findViewById(R.id.txt_Upperhipheight);
-        txt_Thighgirth = view.findViewById(R.id.txt_Thighgirth);
+        txt_Upperhipgirth = view.findViewById(R.id.txt_Upperhipgirth);
     }
 
 
     private void put() {
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("gender", gender.toLowerCase());
@@ -145,55 +118,48 @@ public class MeasureFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                Log.d("onResponse", String.valueOf(response));
                 try {
-                    id = response.getString("id");
-                    firebaseDatabase = FirebaseDatabase.getInstance();
-                    databaseReference = firebaseDatabase.getReference().child("Users");
-                    databaseReference.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                                Profile profile = dataSnapshot1.getValue(Profile.class);
-                                if (firebaseUser.getUid().equals(profile.getUid())) {
-                                    profile.setId(id);
-                                    databaseReference.child(profile.getUid()).setValue(profile);
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-                    get();
+                    id = String.valueOf(response.getJSONObject("id"));
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(getContext(), "Please Try Again", Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(getContext(), "Successful request", Toast.LENGTH_SHORT).show();
+                firebaseDatabase = FirebaseDatabase.getInstance();
+                databaseReference = firebaseDatabase.getReference().child("Users");
+                databaseReference.child(firebaseUser.getUid()).child("id").setValue(id);
+                get();
+                progressDialog.dismiss();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
+                NetworkResponse response = error.networkResponse;
+                if(response != null && response.data != null) {
+                    String errorString = new String(response.data);
+                    Log.i("log error", errorString);
+                }
+                progressDialog.dismiss();
+                Toast.makeText(getContext(), "Fail to Get data", Toast.LENGTH_SHORT).show();
             }
         }) {
             public Map getHeaders() {
                 HashMap headers = new HashMap();
                 headers.put("Authorization", key);
                 headers.put("Content-Type", "application/json");
+                Log.i("sending ", headers.toString());
                 return headers;
             }
         };
+        request.setRetryPolicy(new DefaultRetryPolicy(100000, 1, 1.0f));
         queue.add(request);
     }
 
     private void get() {
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, "https://saia.3dlook.me/api/v2/persons/?measurements_type=all", null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -211,6 +177,7 @@ public class MeasureFragment extends Fragment {
                             }
                         }
                     }
+                    progressDialog.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -234,23 +201,9 @@ public class MeasureFragment extends Fragment {
 
     private void frontparams(JSONObject frontparams) {
         try {
-            txt_Insidelegheight.setText(frontparams.getString("inside_leg_height") + "cm");
-            txt_Backneckheight.setText(frontparams.getString("back_neck_height") + "cm");
+            txt_Insidelegheight.setText(frontparams.getString("inseam") + "cm");
             txt_Necktoupperhiplength.setText(frontparams.getString("body_height") + "cm");
             txt_Frontshoulderwidth.setText(frontparams.getString("shoulders") + "cm");
-            txt_Acrossbackshoulderwidth.setText(frontparams.getString("across_back_shoulder_width") + "cm");
-            txt_Acrossbackwidth.setText(frontparams.getString("across_back_width") + "cm");
-            txt_Shoulderlength.setText(frontparams.getString("shoulder_length") + "cm");
-            txt_Chestwidth.setText(frontparams.getString("chest_top") + "cm");
-            txt_Backshoulderwidth.setText(frontparams.getString("back_shoulder_width") + "cm");
-            txt_Outerarmlength.setText(frontparams.getString("sleeve_length") + "cm");
-            txt_Jacketlength.setText(frontparams.getString("jacket_length") + "cm");
-            txt_Torsoheight.setText(frontparams.getString("torso_height") + "cm");
-            txt_Hipheight.setText(frontparams.getString("hip_height") + "cm");
-            txt_Waistbreadth.setText(frontparams.getString("waist") + "cm");
-            txt_Backnecktohiplength.setText(frontparams.getString("back_neck_to_hip_length") + "cm");
-            txt_Upperhipheight.setText(frontparams.getString("upper_hip_height") + "cm");
-            txt_Waistbreadth.setText(frontparams.getString("waist") + "cm");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -258,15 +211,10 @@ public class MeasureFragment extends Fragment {
 
     private void volumeparams(JSONObject volumeparams) {
         try {
-            txt_Underbustgirth.setText(volumeparams.getString("under_bust_girth") + "cm");
-            txt_Upperchestgirth.setText(volumeparams.getString("upper_chest_girth") + "cm");
+            txt_Upperhipgirth.setText(volumeparams.getString("hips") + "cm");
             txt_Bustgirth.setText(volumeparams.getString("chest") + "cm");
             txt_Waistgirth.setText(volumeparams.getString("waist") + "cm");
             txt_Hipgirth.setText(volumeparams.getString("low_hips") + "cm");
-            txt_Abdomengirth.setText(volumeparams.getString("abdomen") + "cm");
-            txt_Neckgirth.setText(volumeparams.getString("neck_girth") + "cm");
-            txt_Upperarmgirth.setText(volumeparams.getString("bicep") + "cm");
-            txt_Thighgirth.setText(volumeparams.getString("thigh") + "cm");
         } catch (JSONException e) {
             e.printStackTrace();
         }

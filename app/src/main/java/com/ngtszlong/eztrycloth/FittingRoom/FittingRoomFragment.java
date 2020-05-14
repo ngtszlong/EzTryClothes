@@ -2,6 +2,8 @@ package com.ngtszlong.eztrycloth.FittingRoom;
 
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Matrix;
+import android.graphics.Point;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,14 +11,17 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.ViewManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,28 +41,27 @@ import java.util.Locale;
 import static android.content.Context.MODE_PRIVATE;
 
 public class FittingRoomFragment extends Fragment implements TryAdapter.OnItemClickListener {
-    RecyclerView rv_clothes;
+    private RecyclerView rv_clothes;
 
-    FirebaseDatabase mFirebaseDatabase;
-    DatabaseReference mRef;
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mRef;
     private ArrayList<ShoppingCart> shoppingCartArrayList;
     private TryAdapter tryAdapter;
     private FirebaseAuth fAuth;
     private FirebaseUser user;
 
     private ViewGroup mainlayout;
-    RelativeLayout relativeLayout;
+    private RelativeLayout relativeLayout;
 
     private int xDelta;
     private int yDelta;
 
-    ImageButton bin;
-    Button btnxl;
-    Button btnl;
-    Button btnm;
-    Button btns;
-    Button btnxs;
-    ImageView img_background;
+    private ImageView img_background;
+
+    private Matrix matrix = new Matrix();
+    private Float scale = 1f;
+    private ScaleGestureDetector SGD;
+    ImageView imageView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -98,12 +102,9 @@ public class FittingRoomFragment extends Fragment implements TryAdapter.OnItemCl
         mRef.keepSynced(true);
         mainlayout = (RelativeLayout) v.findViewById(R.id.rl_background);
 
-        bin = v.findViewById(R.id.imgbtn_bin);
+        SGD = new ScaleGestureDetector(getContext(), new ScaleListener());
         return v;
     }
-
-
-
 
     private void getImage() {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -113,7 +114,7 @@ public class FittingRoomFragment extends Fragment implements TryAdapter.OnItemCl
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     Profile profile = dataSnapshot1.getValue(Profile.class);
-                    if (user.getUid().equals(profile.getUid())){
+                    if (user.getUid().equals(profile.getUid())) {
                         Picasso.get().load(profile.getFront()).into(img_background);
 
                     }
@@ -131,6 +132,7 @@ public class FittingRoomFragment extends Fragment implements TryAdapter.OnItemCl
     private View.OnTouchListener onTouchListener() {
         return new View.OnTouchListener() {
             public boolean onTouch(View view, MotionEvent event) {
+                SGD.onTouchEvent(event);
                 final int x = (int) event.getRawX();
                 final int y = (int) event.getRawY();
 
@@ -144,13 +146,14 @@ public class FittingRoomFragment extends Fragment implements TryAdapter.OnItemCl
                         break;
                     case MotionEvent.ACTION_MOVE:
                         RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
+                        int[] imagelocation = new int[2];
+                        imageView.getLocationOnScreen(imagelocation);
                         lParams.leftMargin = x - xDelta;
                         lParams.topMargin = y - yDelta;
                         lParams.rightMargin = 0;
                         lParams.bottomMargin = 0;
                         view.setLayoutParams(lParams);
                         break;
-                        case MotionEvent.ACTION_CANCEL:
                 }
                 mainlayout.invalidate();
                 return true;
@@ -161,11 +164,23 @@ public class FittingRoomFragment extends Fragment implements TryAdapter.OnItemCl
     @Override
     public void onItemClick(int position) {
         ShoppingCart shoppingCart = shoppingCartArrayList.get(position);
-        ImageView imageView = new ImageView(getContext());
-        Picasso.get().load(shoppingCart.getTryimage()).into(imageView);
+        imageView = new ImageView(getContext());
+        Picasso.get().load(shoppingCart.getTryimage()).resize(500, 666).into(imageView);
         imageView.setOnTouchListener(onTouchListener());
-        imageView.setLayoutParams(new RelativeLayout.LayoutParams(610, 610));
+        imageView.setLayoutParams(new RelativeLayout.LayoutParams(700, 700));
+        imageView.setScaleType(ImageView.ScaleType.MATRIX);
         relativeLayout.addView(imageView);
+    }
+
+    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            scale = scale * detector.getScaleFactor();
+            scale = Math.max(0.1f, Math.min(scale, 5f));
+            matrix.setScale(scale, scale);
+            imageView.setImageMatrix(matrix);
+            return true;
+        }
     }
 
     private void setLocale(String lang) {

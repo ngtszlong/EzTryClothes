@@ -9,9 +9,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,8 +31,16 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class OrderFragment extends Fragment {
     public static ArrayList<Order> orderArrayList;
+    public static ArrayList<Order> orders;
     OrderAdapter orderAdapter;
     RecyclerView recyclerView;
+    TextView txt_date;
+    TextView txt_price;
+    TextView txt_address;
+    TextView date;
+    TextView total;
+    TextView address;
+    DatabaseReference databaseReference;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,14 +52,14 @@ public class OrderFragment extends Fragment {
         recyclerView = view.findViewById(R.id.rv_order);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("PurchaseOrder").child(firebaseUser.getUid());
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("PurchaseOrder").child(firebaseUser.getUid());
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 orderArrayList = new ArrayList<Order>();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    for (DataSnapshot dataSnapshot2: dataSnapshot1.getChildren()){
+                    for (DataSnapshot dataSnapshot2 : dataSnapshot1.getChildren()) {
                         Order order = dataSnapshot2.getValue(Order.class);
                         orderArrayList.add(order);
                     }
@@ -59,7 +69,7 @@ public class OrderFragment extends Fragment {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onCancelled(DatabaseError databaseError) {
 
             }
         });
