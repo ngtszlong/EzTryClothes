@@ -82,13 +82,13 @@ public class RegisterFragment extends Fragment {
                                 profile.setName("");
                                 profile.setGender("");
                                 profile.setAge("");
-                                profile.setHeight("");
+                                profile.setHeight("160");
                                 profile.setBirth("");
                                 profile.setAddress("");
                                 profile.setPhone("");
                                 profile.setFront("");
                                 profile.setSide("");
-                                profile.setWeight("");
+                                profile.setWeight("40");
                                 profile.setId("");
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 DatabaseReference reference = database.getReference("Users");

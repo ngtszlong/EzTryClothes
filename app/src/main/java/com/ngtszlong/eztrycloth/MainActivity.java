@@ -59,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     String username;
     String phonenumber;
     ImageView image;
+    String front;
+    String side;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         boolean firststart = pref.getBoolean("firstStart", true);
         if (firststart) {
             showStartDialog();
+            FirebaseAuth.getInstance().signOut();
         }
         checkPermission();
         setContentView(R.layout.activity_main);
@@ -82,19 +85,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         image = headerView.findViewById(R.id.header_image);
 
         Menu menu = navigationView.getMenu();
-        if (firebaseAuth.getCurrentUser() != null){
-            for (int i=0;i< menu.findItem(R.id.nav_help).getSubMenu().size();i++){
-                if (menu.findItem(R.id.nav_help).getSubMenu().getItem(i).getItemId() == R.id.nav_login){
+        if (firebaseAuth.getCurrentUser() != null) {
+            for (int i = 0; i < menu.findItem(R.id.nav_help).getSubMenu().size(); i++) {
+                if (menu.findItem(R.id.nav_help).getSubMenu().getItem(i).getItemId() == R.id.nav_login) {
                     menu.findItem(R.id.nav_help).getSubMenu().getItem(i).setVisible(false);
                 }
-                if (menu.findItem(R.id.nav_help).getSubMenu().getItem(i).getItemId() == R.id.nav_register){
+                if (menu.findItem(R.id.nav_help).getSubMenu().getItem(i).getItemId() == R.id.nav_register) {
                     menu.findItem(R.id.nav_help).getSubMenu().getItem(i).setVisible(false);
                 }
             }
-        }else {
+        } else {
             firebaseAuth.getCurrentUser();
-            for (int i=0;i< menu.findItem(R.id.nav_help).getSubMenu().size();i++){
-                if (menu.findItem(R.id.nav_help).getSubMenu().getItem(i).getItemId() == R.id.nav_logout){
+            for (int i = 0; i < menu.findItem(R.id.nav_help).getSubMenu().size(); i++) {
+                if (menu.findItem(R.id.nav_help).getSubMenu().getItem(i).getItemId() == R.id.nav_logout) {
                     menu.findItem(R.id.nav_help).getSubMenu().getItem(i).setVisible(false);
                 }
             }
@@ -112,6 +115,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         setHeaderInfo();
 
+        databaseReference = firebaseDatabase.getReference().child("Users");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                profileArrayList = new ArrayList<Profile>();
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                    Profile profile = dataSnapshot1.getValue(Profile.class);
+                    if (firebaseUser.getUid().equals(profile.getUid())) {
+                        profileArrayList.add(profile);
+                        if (!profile.getFront().equals("")) {
+                            front = profile.getFront();
+                        }
+                        if (!profile.getSide().equals("")) {
+                            side = profile.getSide();
+                        }
+                        front = profile.getFront();
+                        side = profile.getSide();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -162,7 +191,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             } else {
                                 phone.setText("You need to complete your profile");
                             }
-                            Picasso.get().load(profile.getFront()).into(image);
+                            if (!profile.getFront().equals("")) {
+                                Picasso.get().load(profile.getFront()).into(image);
+                            }
                         }
                     }
                 }
@@ -184,6 +215,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_straighten:
                 if (firebaseAuth.getCurrentUser() == null) {
                     Toast.makeText(this, R.string.logininfirst, Toast.LENGTH_SHORT).show();
+                } else if (front.equals("") || side.equals("")) {
+                    Toast.makeText(this, "You need to upload front and side image", Toast.LENGTH_SHORT).show();
                 } else {
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MeasureFragment()).commit();
                 }

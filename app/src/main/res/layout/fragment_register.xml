@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:background="@drawable/gradient"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient"
     tools:context=".Register.RegisterFragment">
 
     <ImageView
@@ -29,6 +29,8 @@ android:background="@drawable/gradient"
         android:hint="Email"
         android:inputType="textEmailAddress"
         android:text="ngtszlong2@yahoo.com.hk"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
         android:textSize="16dp" />
 
     <EditText
@@ -44,6 +46,8 @@ android:background="@drawable/gradient"
         android:hint="Password"
         android:inputType="textPassword"
         android:text="87156215"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
         android:textSize="16dp" />
 
     <EditText
@@ -59,7 +63,9 @@ android:background="@drawable/gradient"
         android:ems="10"
         android:hint="Confirm Password"
         android:inputType="textPassword"
-        android:text="87156215" />
+        android:text="87156215"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/btn_reg_register"

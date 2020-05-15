@@ -101,4 +101,5 @@
         <item>Dress</item>
     </string-array>
     <string name="SizeGuide">Size Guide</string>
+    <string name="Pleasewait">Loading, Please wait...</string>
 </resources>

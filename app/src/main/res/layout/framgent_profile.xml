@@ -163,6 +163,7 @@
             android:drawableLeft="@drawable/ic_action_user"
             android:hint="@string/Height"
             android:inputType="number"
+            android:text="0"
             android:textColor="#FFFFFF"
             android:textColorHint="#FFFFFF"
             android:textSize="16dp" />
@@ -176,6 +177,7 @@
             android:background="#11000000"
             android:drawableLeft="@drawable/ic_action_user"
             android:hint="@string/Weight"
+            android:text="0"
             android:inputType="number"
             android:textColor="#FFFFFF"
             android:textColorHint="#FFFFFF"

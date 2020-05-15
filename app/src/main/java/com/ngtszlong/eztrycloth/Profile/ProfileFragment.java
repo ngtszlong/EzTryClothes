@@ -1,6 +1,7 @@
 package com.ngtszlong.eztrycloth.Profile;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -83,6 +84,7 @@ public class ProfileFragment extends Fragment {
     RadioButton rb_male;
     RadioButton rb_female;
     TextView txt_help;
+    ProgressDialog progressDialog;
 
     @Nullable
     @Override
@@ -116,9 +118,9 @@ public class ProfileFragment extends Fragment {
         btn_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Integer.parseInt(edt_height.getText().toString().trim()) < 150){
+                if (Integer.parseInt(edt_height.getText().toString()) < 150){
                     edt_height.setError("The minimum height is 150cm");
-                }else if (Integer.parseInt(edt_height.getText().toString().trim()) > 200){
+                }else if (Integer.parseInt(edt_height.getText().toString()) > 200){
                     edt_height.setError("The maximum height is 200cm");
                 }else{
                     updatedata();
@@ -137,10 +139,12 @@ public class ProfileFragment extends Fragment {
         edt_height.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (Integer.parseInt(edt_height.getText().toString().trim()) < 150){
-                    edt_height.setError("The minimum height is 150cm");
-                }else if (Integer.parseInt(edt_height.getText().toString().trim()) > 200){
-                    edt_height.setError("The maximum height is 200cm");
+                if (!edt_height.equals("")){
+                    if (Integer.parseInt(edt_height.getText().toString()) < 150){
+                        edt_height.setError("The minimum height is 150cm");
+                    }else if (Integer.parseInt(edt_height.getText().toString()) > 200){
+                        edt_height.setError("The maximum height is 200cm");
+                    }
                 }
             }
         });
@@ -172,7 +176,8 @@ public class ProfileFragment extends Fragment {
                 dialog.show();
             }
         });
-
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage(getString(R.string.Pleasewait));
         return view;
     }
 
@@ -199,7 +204,6 @@ public class ProfileFragment extends Fragment {
                         profile.setHeight(edt_height.getText().toString());
                         profile.setBirth(txt_birth.getText().toString());
                         profile.setAddress(edt_address.getText().toString());
-                        profile.setFront(front);
                         profile.setSide(side);
                         profile.setGender(gender);
                         profile.setWeight(edt_weight.getText().toString());
@@ -300,6 +304,7 @@ public class ProfileFragment extends Fragment {
         if (requestCode == 1) {
             switch (resultCode) {
                 case RESULT_OK:
+                    progressDialog.show();
                     Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                     handleUpload(bitmap);
                     if (action.equals("front")){
@@ -334,10 +339,11 @@ public class ProfileFragment extends Fragment {
                             default:
                                 break;
                         }
-                        //Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
+                        progressDialog.show();
                         handleUpload(bitmap);
                         if (action.equals("front")){
                             img_front.setImageBitmap(bitmap);
+                            databaseReference.child(firebaseUser.getUid()).child("front").setValue(front);
                         }else if (action.equals("side")){
                             img_side.setImageBitmap(bitmap);
                         }
@@ -387,8 +393,12 @@ public class ProfileFragment extends Fragment {
                 Log.d(TAG, "onSuccess: " + uri);
                 if (action.equals("front")) {
                     front = uri.toString();
+                    databaseReference.child(firebaseUser.getUid()).child("front").setValue(uri.toString());
+                    progressDialog.dismiss();
                 } else if (action.equals("side")) {
                     side = uri.toString();
+                    databaseReference.child(firebaseUser.getUid()).child("side").setValue(uri.toString());
+                    progressDialog.dismiss();
                 }
 
             }

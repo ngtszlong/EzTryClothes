@@ -23,6 +23,8 @@
         android:layout_above="@+id/edt_login_pw"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="35dp"
+        android:textColorHint="#FFFFFF"
+        android:textColor="#FFFFFF"
         android:background="#11000000"
         android:drawableLeft="@drawable/ic_action_user"
         android:ems="10"
@@ -33,6 +35,8 @@
     <EditText
         android:id="@+id/edt_login_pw"
         android:layout_width="250dp"
+        android:textColorHint="#FFFFFF"
+        android:textColor="#FFFFFF"
         android:layout_height="40dp"
         android:layout_alignStart="@+id/edt_login_email"
         android:layout_alignLeft="@+id/edt_login_email"

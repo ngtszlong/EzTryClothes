@@ -243,6 +243,7 @@ public class MeasureFragment extends Fragment {
                     if (firebaseUser.getUid().equals(profile.getUid())) {
                         gender = profile.getGender();
                         height = profile.getHeight();
+
                         front = profile.getFront();
                         side = profile.getSide();
                         weight = profile.getWeight();

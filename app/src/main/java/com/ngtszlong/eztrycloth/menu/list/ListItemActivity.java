@@ -32,7 +32,6 @@ public class ListItemActivity extends AppCompatActivity implements ListAdapter.O
     private ListAdapter listAdapter;
     public static ArrayList<ListItem> listItems;
     String type;
-    String englishtype;
 
     Toolbar toolbar;
 
@@ -50,13 +49,13 @@ public class ListItemActivity extends AppCompatActivity implements ListAdapter.O
         getSupportActionBar().setTitle(type);
 
         if (type.equals("連帽衫")) {
-            englishtype = "Hoodies";
+            type = "Hoodies";
         } else if (type.equals("襯衫")) {
-            englishtype = "Shirt";
+            type = "Shirt";
         } else if (type.equals("上衣")) {
-            englishtype = "T-Shirt";
+            type = "T-Shirt";
         } else if (type.equals("連衣裙")) {
-            englishtype = "Dress";
+            type = "Dress";
         }
 
 
@@ -72,7 +71,7 @@ public class ListItemActivity extends AppCompatActivity implements ListAdapter.O
                 listItems = new ArrayList<ListItem>();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     ListItem l = dataSnapshot1.getValue(ListItem.class);
-                    if (type.equals(l.getType()) || englishtype.equals(l.getType())) {
+                    if (type.equals(l.getType())) {
                         listItems.add(l);
                     }
                 }
