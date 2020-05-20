@@ -70,15 +70,15 @@ public class MenuFragment extends Fragment implements MenuAdapter.OnItemClickLis
         rg_type.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (rb_all.getId() == checkedId){
+                if (rb_all.getId() == checkedId) {
                     menuItems.clear();
                     type = getResources().getStringArray(R.array.type);
                     check(type);
-                }else if (rb_men.getId() == checkedId){
+                } else if (rb_men.getId() == checkedId) {
                     menuItems.clear();
                     type = getResources().getStringArray(R.array.men);
                     check(type);
-                }else if (rb_women.getId() == checkedId){
+                } else if (rb_women.getId() == checkedId) {
                     menuItems.clear();
                     type = getResources().getStringArray(R.array.women);
                     check(type);
@@ -89,15 +89,19 @@ public class MenuFragment extends Fragment implements MenuAdapter.OnItemClickLis
     }
 
     private void check(String[] type) {
-        for (int i = 0; i< type.length; i++){
-            if (type[i].equals("Hoodies") || type[i].equals("連帽衫")){
+        for (int i = 0; i < type.length; i++) {
+            if (type[i].equals("Hoodies") || type[i].equals("連帽衫")) {
                 menuItems.add(new MenuItem(type[i], R.drawable.hoodies));
-            }else if (type[i].equals("Shirt") || type[i].equals("襯衫")){
+            } else if (type[i].equals("Shirt") || type[i].equals("襯衫")) {
                 menuItems.add(new MenuItem(type[i], R.drawable.shirt));
-            }else if (type[i].equals("T-Shirt") || type[i].equals("上衣")){
+            } else if (type[i].equals("T-Shirt") || type[i].equals("上衣")) {
                 menuItems.add(new MenuItem(type[i], R.drawable.tshirt));
-            }else if (type[i].equals("Dress") || type[i].equals("連衣裙")){
+            } else if (type[i].equals("Dress") || type[i].equals("連衣裙")) {
                 menuItems.add(new MenuItem(type[i], R.drawable.dress));
+            } else if (type[i].equals("jeans") || type[i].equals("牛仔褲")) {
+                menuItems.add(new MenuItem(type[i], R.drawable.jeans));
+            } else if (type[i].equals("shorts") || type[i].equals("短褲")) {
+                menuItems.add(new MenuItem(type[i], R.drawable.shorts));
             }
         }
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));

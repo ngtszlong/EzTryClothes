@@ -91,11 +91,15 @@
         <item>Shirt</item>
         <item>T-Shirt</item>
         <item>Dress</item>
+        <item>jeans</item>
+        <item>shorts</item>
     </string-array>
     <string-array name="men">
         <item>Hoodies</item>
         <item>Shirt</item>
         <item>T-Shirt</item>
+        <item>jeans</item>
+        <item>shorts</item>
     </string-array>
     <string-array name="women">
         <item>Dress</item>

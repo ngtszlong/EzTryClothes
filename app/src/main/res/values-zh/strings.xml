@@ -91,11 +91,15 @@
         <item>襯衫</item>
         <item>上衣</item>
         <item>連衣裙</item>
+        <item>牛仔褲</item>
+        <item>短褲</item>
     </string-array>
     <string-array name="men">
         <item>連帽衫</item>
         <item>襯衫</item>
         <item>上衣</item>
+        <item>牛仔褲</item>
+        <item>短褲</item>
     </string-array>
     <string-array name="women">
         <item>連衣裙</item>

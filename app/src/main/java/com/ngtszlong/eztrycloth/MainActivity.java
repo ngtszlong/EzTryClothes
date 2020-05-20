@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     TextView phone;
     TextView name;
     FirebaseAuth firebaseAuth;
-    DatabaseReference databaseReference;
     FirebaseDatabase firebaseDatabase;
     FirebaseUser firebaseUser;
     ArrayList<Profile> profileArrayList;
@@ -76,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -114,33 +114,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigationView.setCheckedItem(R.id.nav_menu);
         }
         setHeaderInfo();
-
-        databaseReference = firebaseDatabase.getReference().child("Users");
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                profileArrayList = new ArrayList<Profile>();
-                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    Profile profile = dataSnapshot1.getValue(Profile.class);
-                    if (firebaseUser.getUid().equals(profile.getUid())) {
-                        profileArrayList.add(profile);
-                        if (!profile.getFront().equals("")) {
+        if (firebaseAuth.getCurrentUser() != null) {
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    profileArrayList = new ArrayList<Profile>();
+                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                        Profile profile = dataSnapshot1.getValue(Profile.class);
+                        if (firebaseUser.getUid().equals(profile.getUid())) {
+                            profileArrayList.add(profile);
+                            if (!profile.getFront().equals("")) {
+                                front = profile.getFront();
+                            }
+                            if (!profile.getSide().equals("")) {
+                                side = profile.getSide();
+                            }
                             front = profile.getFront();
-                        }
-                        if (!profile.getSide().equals("")) {
                             side = profile.getSide();
                         }
-                        front = profile.getFront();
-                        side = profile.getSide();
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
     }
 
     @Override
@@ -171,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (firebaseAuth.getCurrentUser() != null) {
             firebaseUser = firebaseAuth.getCurrentUser();
             firebaseDatabase = FirebaseDatabase.getInstance();
-            databaseReference = firebaseDatabase.getReference().child("Users");
+            DatabaseReference databaseReference = firebaseDatabase.getReference().child("Users");
             databaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

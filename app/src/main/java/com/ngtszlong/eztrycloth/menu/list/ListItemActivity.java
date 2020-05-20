@@ -56,6 +56,10 @@ public class ListItemActivity extends AppCompatActivity implements ListAdapter.O
             type = "T-Shirt";
         } else if (type.equals("連衣裙")) {
             type = "Dress";
+        }else if (type.equals("牛仔褲")) {
+            type = "jeans";
+        }else if (type.equals("短褲")) {
+            type = "shorts";
         }
 
 
