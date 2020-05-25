@@ -225,7 +225,6 @@ public class ProfileFragment extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        firebaseDatabase.setPersistenceEnabled(true);
         databaseReference = firebaseDatabase.getReference().child("Users");
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override

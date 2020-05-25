@@ -47,6 +47,8 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -79,9 +81,9 @@ public class MeasureFragment extends Fragment {
     private TextView txt_Upperhipgirth;
     private String id;
 
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
 
-    TextView txt_sizeguide;
+    private TextView txt_sizeguide;
 
     @Nullable
     @Override
@@ -134,7 +136,7 @@ public class MeasureFragment extends Fragment {
             public void onResponse(JSONObject response) {
                 Log.d("onResponse", String.valueOf(response));
                 try {
-                    id = String.valueOf(response.getJSONObject("id"));
+                    id = response.getString("task_set_url");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -148,7 +150,7 @@ public class MeasureFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 NetworkResponse response = error.networkResponse;
-                if(response != null && response.data != null) {
+                if (response != null && response.data != null) {
                     String errorString = new String(response.data);
                     Log.i("log error", errorString);
                 }
@@ -169,23 +171,18 @@ public class MeasureFragment extends Fragment {
     }
 
     private void get() {
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, "https://saia.3dlook.me/api/v2/persons/?measurements_type=all", null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, id, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    JSONArray jsonArray = response.getJSONArray("results");
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject bodysize = jsonArray.getJSONObject(i);
-                        if (bodysize.getString("id").equals(id)) {
-                            JSONObject volumeparams = bodysize.getJSONObject("volume_params");
-                            for (int x = 0; x < volumeparams.length(); x++) {
-                                volumeparams(volumeparams);
-                            }
-                            JSONObject frontparams = bodysize.getJSONObject("front_params");
-                            for (int y = 0; y < frontparams.length(); y++) {
-                                frontparams(frontparams);
-                            }
-                        }
+                    Log.d("Response", String.valueOf(response));
+                    JSONObject volumeparams = response.getJSONObject("volume_params");
+                    for (int x = 0; x < volumeparams.length(); x++) {
+                        volumeparams(volumeparams);
+                    }
+                    JSONObject frontparams = response.getJSONObject("front_params");
+                    for (int y = 0; y < frontparams.length(); y++) {
+                        frontparams(frontparams);
                     }
                     progressDialog.dismiss();
                 } catch (JSONException e) {
@@ -262,6 +259,7 @@ public class MeasureFragment extends Fragment {
 
             }
         });
+        databaseReference.keepSynced(true);
     }
 
     public String convertUrlToBase64(String url) {

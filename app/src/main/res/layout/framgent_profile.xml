@@ -108,110 +108,212 @@
             </RadioGroup>
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/edt_mpro_name"
-            android:layout_width="250dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/Displayname"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="16dp" />
+
+            <EditText
+                android:id="@+id/edt_mpro_name"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:textAlignment="center"
+                android:background="#11000000"
+                android:hint="@string/Displayname"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:textSize="16dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/Phonenumber"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="16dp" />
+
+            <EditText
+                android:id="@+id/edt_mpro_phone"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="#11000000"
+                android:textAlignment="center"
+                android:hint="@string/Phonenumber"
+                android:maxLength="8"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:textSize="16dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/Age"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="16dp" />
+
+            <EditText
+                android:id="@+id/edt_mpro_age"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="#11000000"
+                android:ems="10"
+                android:textAlignment="center"
+                android:hint="@string/Age"
+                android:inputType="number"
+                android:maxLength="2"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:textSize="16dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/Height"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="16dp" />
+
+            <EditText
+                android:id="@+id/edt_mpro_height"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="#11000000"
+                android:hint="@string/Height"
+                android:inputType="number"
+                android:text="0"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:textAlignment="center"
+                android:textSize="16dp" />
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="150dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="30dp"
-            android:background="#11000000"
-            android:drawableLeft="@drawable/ic_action_user"
-            android:hint="@string/Displayname"
+            android:gravity="center"
+            android:text="@string/Weight"
+            android:textAlignment="center"
             android:textColor="#FFFFFF"
-            android:textColorHint="#FFFFFF"
-            android:textSize="16dp" />
-
-        <EditText
-            android:id="@+id/edt_mpro_phone"
-            android:layout_width="250dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="30dp"
-            android:background="#11000000"
-            android:drawableLeft="@drawable/ic_action_user"
-            android:hint="@string/Phonenumber"
-            android:maxLength="8"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#FFFFFF"
-            android:textSize="16dp" />
-
-        <EditText
-            android:id="@+id/edt_mpro_age"
-            android:layout_width="250dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="30dp"
-            android:background="#11000000"
-            android:drawableLeft="@drawable/ic_action_user"
-            android:ems="10"
-            android:hint="@string/Age"
-            android:inputType="number"
-            android:maxLength="2"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#FFFFFF"
-            android:textSize="16dp" />
-
-
-        <EditText
-            android:id="@+id/edt_mpro_height"
-            android:layout_width="250dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="30dp"
-            android:background="#11000000"
-            android:drawableLeft="@drawable/ic_action_user"
-            android:hint="@string/Height"
-            android:inputType="number"
-            android:text="0"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#FFFFFF"
             android:textSize="16dp" />
 
         <EditText
             android:id="@+id/edt_mpro_weight"
-            android:layout_width="250dp"
+            android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="30dp"
             android:background="#11000000"
-            android:drawableLeft="@drawable/ic_action_user"
             android:hint="@string/Weight"
             android:inputType="number"
+            android:textAlignment="center"
             android:text="0"
             android:textColor="#FFFFFF"
             android:textColorHint="#FFFFFF"
             android:textSize="16dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/Birth"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="16dp" />
 
         <TextView
             android:id="@+id/txt_mpro_birth"
-            android:layout_width="250dp"
+            android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="30dp"
+            android:gravity="center"
             android:background="#11000000"
-            android:drawableStart="@drawable/ic_action_user"
-            android:drawableLeft="@drawable/ic_action_user"
-            android:gravity="center|left"
             android:hint="@string/Birth"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
+            android:textAlignment="center"
+            android:textSize="16dp"
             android:textColorHint="#FFFFFF" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:orientation="horizontal">
 
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/Address"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="16dp" />
 
         <EditText
             android:id="@+id/edt_mpro_address"
             android:layout_width="250dp"
             android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="30dp"
             android:background="#11000000"
-            android:drawableLeft="@drawable/ic_action_user"
+            android:textAlignment="center"
             android:ems="10"
             android:hint="@string/Address"
             android:inputType="text"
             android:textColor="#FFFFFF"
             android:textColorHint="#FFFFFF"
             android:textSize="16dp" />
+    </LinearLayout>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/btn_mpro_update"
