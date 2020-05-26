@@ -25,6 +25,9 @@ public class Detail {
     String Price;
     String Discount;
 
+    public Detail() {
+    }
+
     public Detail(String no, String company, String name_Chi, String name_Eng, String gender, String type, String color_Chi, String color_Eng, int thumbnail, String XXL, String XL, String l, String m, String s, String XS, String XXS, String description_Chi, String description_Eng, String material_Chi, String material_Eng, String quantity, String price, String discount) {
         No = no;
         Company = company;

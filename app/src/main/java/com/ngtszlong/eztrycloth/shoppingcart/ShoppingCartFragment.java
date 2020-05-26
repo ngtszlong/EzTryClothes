@@ -1,5 +1,6 @@
 package com.ngtszlong.eztrycloth.shoppingcart;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,7 +29,9 @@ import com.ngtszlong.eztrycloth.MainActivity;
 import com.ngtszlong.eztrycloth.Order.Order;
 import com.ngtszlong.eztrycloth.Profile.Profile;
 import com.ngtszlong.eztrycloth.R;
+import com.ngtszlong.eztrycloth.menu.detail.Detail;
 import com.ngtszlong.eztrycloth.menu.detail.DetailActivity;
+import com.ngtszlong.eztrycloth.menu.list.ListItem;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,6 +46,7 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference reference;
     private ArrayList<ShoppingCart> shoppingCartArrayList;
+    ArrayList<ListItem> listItemArrayList;
     private ShoppingCartAdapter shoppingCartAdapter;
     private FirebaseAuth fAuth;
     private FirebaseUser user;
@@ -56,6 +61,9 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
     String address;
     String name;
     double total = 0;
+
+    int quantity;
+    String stringquantity;
 
     @Nullable
     @Override
@@ -102,10 +110,27 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     Profile profile = dataSnapshot1.getValue(Profile.class);
-                    if (profile.getUid().equals(user.getUid())){
+                    if (profile.getUid().equals(user.getUid())) {
                         address = profile.getAddress();
                         name = profile.getName();
                     }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        DatabaseReference databaseReference2 = firebaseDatabase.getReference().child("Clothes");
+        databaseReference2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                listItemArrayList = new ArrayList<ListItem>();
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                    ListItem listItem = dataSnapshot1.getValue(ListItem.class);
+                    listItemArrayList.add(listItem);
                 }
             }
 
@@ -119,37 +144,83 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
             @Override
             public void onClick(View v) {
                 getcurrenttime();
-                final String uid = user.getUid();
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                StringBuilder message = new StringBuilder(10000);
                 for (int i = 0; i < shoppingCartArrayList.size(); i++) {
-                    if (!shoppingCartArrayList.get(i).getQuantity().equals("0")) {
-                        order.setCompanyuid(shoppingCartArrayList.get(i).getCompanyuid());
-                        order.setDate(str);
-                        order.setDiscount(shoppingCartArrayList.get(i).getDiscount());
-                        order.setUid(shoppingCartArrayList.get(i).getUid());
-                        order.setStr(shoppingCartArrayList.get(i).getStr());
-                        order.setName(shoppingCartArrayList.get(i).getName());
-                        order.setImage(shoppingCartArrayList.get(i).getImage());
-                        order.setPrice(shoppingCartArrayList.get(i).getPrice());
-                        order.setQuantity(shoppingCartArrayList.get(i).getQuantity());
-                        order.setNo(shoppingCartArrayList.get(i).getNo());
-                        total = total + Double.parseDouble(shoppingCartArrayList.get(i).getPrice()) * Double.parseDouble(shoppingCartArrayList.get(i).getQuantity());
-                        order.setAddress(address);
-                        order.setCustomername(name);
-
-                        database.getReference("PurchaseOrder").child(uid).child("Order"+str).child(String.valueOf(i)).setValue(order);
-
-                        DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("ShoppingCart").child(user.getUid()).child(shoppingCartArrayList.get(i).getStr());
-                        databaseReference1.removeValue();
+                    if (!shoppingCartArrayList.get(i).getQuantity().equals("0")) {//user account quantity
+                        for (int k = 0; k < listItemArrayList.size(); k++) {
+                            if (shoppingCartArrayList.get(i).getNo().equals(listItemArrayList.get(k).getNo())) {
+                                if (listItemArrayList.get(k).getQuantity().equals("0")) {
+                                    message.append(shoppingCartArrayList.get(i).getName() + "\n");
+                                }
+                            }
+                        }
                     }
                 }
-                Toast.makeText(getContext(), "You have already Ordered", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getContext(), MainActivity.class);
-                startActivity(intent);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("This item is out of stock")
+                        .setMessage(message + "\nAre you sure continue order?(The item above cannot buy now)")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                yesaction();
+                            }
+                        }).setNegativeButton("No, i buy when it have stock", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).show();
             }
         });
 
         return view;
+    }
+
+    public void yesaction() {
+        final String uid = user.getUid();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        for (int i = 0; i < shoppingCartArrayList.size(); i++) {
+            if (!shoppingCartArrayList.get(i).getQuantity().equals("0")) {
+
+                order.setCompanyuid(shoppingCartArrayList.get(i).getCompanyuid());
+                order.setDate(str);
+                order.setDiscount(shoppingCartArrayList.get(i).getDiscount());
+                order.setUid(shoppingCartArrayList.get(i).getUid());
+                order.setStr(shoppingCartArrayList.get(i).getStr());
+                order.setName(shoppingCartArrayList.get(i).getName());
+                order.setImage(shoppingCartArrayList.get(i).getImage());
+                order.setPrice(shoppingCartArrayList.get(i).getPrice());
+                order.setQuantity(shoppingCartArrayList.get(i).getQuantity());
+                order.setNo(shoppingCartArrayList.get(i).getNo());
+                total = total + Double.parseDouble(shoppingCartArrayList.get(i).getPrice()) * Double.parseDouble(shoppingCartArrayList.get(i).getQuantity());
+                order.setAddress(address);
+                order.setCustomername(name);
+
+                final int buyno = Integer.parseInt(shoppingCartArrayList.get(i).getQuantity());
+                final String no = shoppingCartArrayList.get(i).getNo();
+                for (int k = 0; k < listItemArrayList.size(); k++) {
+                    if (listItemArrayList.get(k).getNo().equals(no)) {
+                        stringquantity = listItemArrayList.get(k).getQuantity();
+                        quantity = Integer.parseInt(stringquantity) - buyno;
+                    }
+                }
+                if (stringquantity.equals("0")) {
+                    quantity = 0;
+                } else {
+                    database.getReference("Clothes").child(no).child("quantity").setValue(String.valueOf(quantity));
+
+                    database.getReference("PurchaseOrder").child(uid).child("Order" + str).child(String.valueOf(i)).setValue(order);
+
+                    DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("ShoppingCart").child(user.getUid()).child(shoppingCartArrayList.get(i).getStr());
+                    databaseReference1.removeValue();
+                    quantity = 0;
+                }
+            }
+        }
+        Toast.makeText(getContext(), "You have already Ordered", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getContext(), MainActivity.class);
+        startActivity(intent);
     }
 
     public void getcurrenttime() {
