@@ -102,43 +102,47 @@ public class DetailActivity extends AppCompatActivity {
         cv_shopcart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mFirebaseDatabase = FirebaseDatabase.getInstance();
-                mRef = mFirebaseDatabase.getReference().child("ShoppingCart").child(user.getUid());
-                mRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                            ListItem l = dataSnapshot1.getValue(ListItem.class);
-                            if (l.getNo().equals(No)) {
-                                action = "Yes";
-                                Toast.makeText(DetailActivity.this, "It has already added to your Shopping Cart", Toast.LENGTH_SHORT).show();
+                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                    mFirebaseDatabase = FirebaseDatabase.getInstance();
+                    mRef = mFirebaseDatabase.getReference().child("ShoppingCart").child(user.getUid());
+                    mRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                                ListItem l = dataSnapshot1.getValue(ListItem.class);
+                                if (l.getNo().equals(No)) {
+                                    action = "Yes";
+                                    Toast.makeText(DetailActivity.this, "It has already added to your Shopping Cart", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            if (action.equals("No")) {
+                                getcurrenttime();
+                                String uid = user.getUid();
+                                shoppingCart.setNo(No);
+                                shoppingCart.setColor(color);
+                                shoppingCart.setName(name);
+                                shoppingCart.setGender(gender);
+                                shoppingCart.setPrice(price);
+                                shoppingCart.setImage(image);
+                                shoppingCart.setCompanyuid(companyuid);
+                                shoppingCart.setTryimage(imagetry);
+                                shoppingCart.setQuantity("1");
+                                shoppingCart.setStr(str);
+                                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                DatabaseReference reference = database.getReference("ShoppingCart");
+                                reference.child(uid).child(str).setValue(shoppingCart);
+                                Toast.makeText(DetailActivity.this, "Added to Shopping Cart", Toast.LENGTH_SHORT).show();
                             }
                         }
-                        if (action.equals("No")) {
-                            getcurrenttime();
-                            String uid = user.getUid();
-                            shoppingCart.setNo(No);
-                            shoppingCart.setColor(color);
-                            shoppingCart.setName(name);
-                            shoppingCart.setGender(gender);
-                            shoppingCart.setPrice(price);
-                            shoppingCart.setImage(image);
-                            shoppingCart.setCompanyuid(companyuid);
-                            shoppingCart.setTryimage(imagetry);
-                            shoppingCart.setQuantity("1");
-                            shoppingCart.setStr(str);
-                            FirebaseDatabase database = FirebaseDatabase.getInstance();
-                            DatabaseReference reference = database.getReference("ShoppingCart");
-                            reference.child(uid).child(str).setValue(shoppingCart);
-                            Toast.makeText(DetailActivity.this, "Added to Shopping Cart", Toast.LENGTH_SHORT).show();
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
                         }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+                    });
+                }else{
+                    Toast.makeText(DetailActivity.this, "You must login first", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
