@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,7 +30,6 @@ import com.ngtszlong.eztrycloth.MainActivity;
 import com.ngtszlong.eztrycloth.Order.Order;
 import com.ngtszlong.eztrycloth.Profile.Profile;
 import com.ngtszlong.eztrycloth.R;
-import com.ngtszlong.eztrycloth.menu.detail.Detail;
 import com.ngtszlong.eztrycloth.menu.detail.DetailActivity;
 import com.ngtszlong.eztrycloth.menu.list.ListItem;
 
@@ -43,27 +43,24 @@ import static android.content.Context.MODE_PRIVATE;
 public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapter.OnItemClickListener {
 
     private RecyclerView shopcartrecyclerView;
-    private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference reference;
     private ArrayList<ShoppingCart> shoppingCartArrayList;
     private ArrayList<ListItem> listItemArrayList;
     private ShoppingCartAdapter shoppingCartAdapter;
-    private FirebaseAuth fAuth;
     private FirebaseUser user;
-    private CardView cardView;
 
-    Order order;
+    private Order order;
 
-    private SimpleDateFormat format;
-    private Date date;
     private String str;
 
     private String address;
     private String name;
-    double total = 0;
+    private double total = 0;
 
     private int quantity;
     private String stringquantity;
+
+    private TextView txt_upper;
+    private TextView txt_lower;
 
     @Nullable
     @Override
@@ -71,18 +68,48 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
         getActivity().setTitle(getText(R.string.ShoppingCart));
         LoadLocale();
         View view = inflater.inflate(R.layout.framgent_shoppingcart, container, false);
-        cardView = view.findViewById(R.id.btn_shopcart);
+        CardView cardView = view.findViewById(R.id.btn_shopcart);
 
         shopcartrecyclerView = view.findViewById(R.id.rv_shopcart);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         shopcartrecyclerView.setLayoutManager(linearLayoutManager);
 
+        TextView txt_sizeguide = view.findViewById(R.id.txt_helpguide);
+        txt_sizeguide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(getContext()).setView(R.layout.sizeguide).show();
+            }
+        });
+
+        txt_upper = view.findViewById(R.id.sc_upperbodysize);
+        txt_lower = view.findViewById(R.id.sc_lowerbodysize);
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference reference = firebaseDatabase.getReference().child("Users");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                    Profile profile = dataSnapshot1.getValue(Profile.class);
+                    if (user.getUid().equals(profile.getUid())){
+                        txt_upper.setText(profile.getUppersize());
+                        txt_lower.setText(profile.getLowersize());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
         order = new Order();
 
-        fAuth = FirebaseAuth.getInstance();
+        FirebaseAuth fAuth = FirebaseAuth.getInstance();
         user = fAuth.getCurrentUser();
-        firebaseDatabase = FirebaseDatabase.getInstance();
         reference = firebaseDatabase.getReference().child("ShoppingCart").child(user.getUid());
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -91,6 +118,9 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     ShoppingCart shoppingCart = dataSnapshot1.getValue(ShoppingCart.class);
                     shoppingCartArrayList.add(shoppingCart);
+                }
+                if (shoppingCartArrayList.size()==0){
+                    Toast.makeText(getContext(), R.string.shoppingCartempty, Toast.LENGTH_SHORT).show();
                 }
                 shoppingCartAdapter = new ShoppingCartAdapter(getActivity(), shoppingCartArrayList);
                 shopcartrecyclerView.setAdapter(shoppingCartAdapter);
@@ -158,14 +188,14 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
                 }
                 if (!message.toString().equals("")){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("This item is out of stock")
-                            .setMessage(message + "\nAre you sure continue order?(The item above cannot buy now)")
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    builder.setTitle(R.string.outofstock)
+                            .setMessage(message + getString(R.string.question_order))
+                            .setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     yesaction();
                                 }
-                            }).setNegativeButton("No, i buy when it have stock", new DialogInterface.OnClickListener() {
+                            }).setNegativeButton(R.string.buynexttime, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
@@ -228,8 +258,8 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
     }
 
     public void getcurrenttime() {
-        format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        date = new Date(System.currentTimeMillis());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date(System.currentTimeMillis());
         str = format.format(date);
     }
 

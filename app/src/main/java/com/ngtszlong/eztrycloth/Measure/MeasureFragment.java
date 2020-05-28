@@ -1,7 +1,6 @@
 package com.ngtszlong.eztrycloth.Measure;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -29,7 +28,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -41,14 +39,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.ngtszlong.eztrycloth.R;
 import com.ngtszlong.eztrycloth.Profile.Profile;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -57,10 +52,9 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class MeasureFragment extends Fragment {
     private String url = "https://saia.3dlook.me/api/v2/persons/?measurements_type=all";
-    private String key = "APIKey 93bb8c48e5289c0f4feda4ff48a647e3e8465372";
+    private String key;
 
     private FirebaseUser firebaseUser;
-    private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
 
@@ -79,11 +73,17 @@ public class MeasureFragment extends Fragment {
     private TextView txt_Frontshoulderwidth;
     private TextView txt_Insidelegheight;
     private TextView txt_Upperhipgirth;
+    private TextView txt_uppersize;
+    private TextView txt_lowersize;
     private String id;
 
     private ProgressDialog progressDialog;
 
-    private TextView txt_sizeguide;
+    private double Bustgirth;
+    private double Frontshoulderwidth;
+    private double Hipgirth;
+    private double Waistgirth;
+
 
     @Nullable
     @Override
@@ -94,7 +94,28 @@ public class MeasureFragment extends Fragment {
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage(getText(R.string.GettingData));
         progressDialog.show();
-        txt_sizeguide = view.findViewById(R.id.txt_help);
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                    if (dataSnapshot1.getKey().equals("APIKey")) {
+                        String value = dataSnapshot1.getValue().toString();
+                        key = value;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        TextView txt_sizeguide = view.findViewById(R.id.txt_help);
         txt_sizeguide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,8 +136,9 @@ public class MeasureFragment extends Fragment {
         txt_Frontshoulderwidth = view.findViewById(R.id.txt_Frontshoulderwidth);
         txt_Insidelegheight = view.findViewById(R.id.txt_Insidelegheight);
         txt_Upperhipgirth = view.findViewById(R.id.txt_Upperhipgirth);
+        txt_uppersize = view.findViewById(R.id.upperbodysize);
+        txt_lowersize = view.findViewById(R.id.lowerbodysize);
     }
-
 
     private void put() {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -184,6 +206,13 @@ public class MeasureFragment extends Fragment {
                     for (int y = 0; y < frontparams.length(); y++) {
                         frontparams(frontparams);
                     }
+                    if (gender.equals("Male")) {
+                        menuppersizedefine();
+                        menlowersizedefine();
+                    } else if (gender.equals("Female")) {
+                        womenuppersizedefine();
+                        womenlowersizedefine();
+                    }
                     progressDialog.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -206,11 +235,182 @@ public class MeasureFragment extends Fragment {
         queue.add(request);
     }
 
+    private void womenlowersizedefine() {
+        String size = null;
+        if (Hipgirth > 82 && Hipgirth < 88) {//XS
+            if (Waistgirth < 63 && Waistgirth > 57) {//XS
+                size = "XS";
+            } else if (Waistgirth < 66 && Waistgirth > 60) {//S
+                size = "S";
+            } else if (Waistgirth < 69 && Waistgirth > 63) {//M
+                size = "M";
+            } else if (Waistgirth < 75 && Waistgirth > 69) {//L
+                size = "L";
+            } else if (Waistgirth > 75) {//XL
+                size = "XL";
+            }
+        } else if (Hipgirth > 85 && Hipgirth < 91) {//S
+            if (Waistgirth < 63 && Waistgirth > 57) {//XS
+                size = "XS";
+            } else if (Waistgirth < 66 && Waistgirth > 60) {//S
+                size = "S";
+            } else if (Waistgirth < 69 && Waistgirth > 63) {//M
+                size = "M";
+            } else if (Waistgirth < 75 && Waistgirth > 69) {//L
+                size = "L";
+            } else if (Waistgirth > 75) {//XL
+                size = "XL";
+            }
+        } else if (Hipgirth > 88 && Hipgirth < 94) {//M
+            if (Waistgirth < 63 && Waistgirth > 57) {//XS
+                size = "XS";
+            } else if (Waistgirth < 66 && Waistgirth > 60) {//S
+                size = "S";
+            } else if (Waistgirth < 69 && Waistgirth > 63) {//M
+                size = "M";
+            } else if (Waistgirth < 75 && Waistgirth > 69) {//L
+                size = "L";
+            } else if (Waistgirth > 75) {//XL
+                size = "XL";
+            }
+        } else if (Hipgirth > 94 && Hipgirth < 100) {//L
+            if (Waistgirth < 63 && Waistgirth > 57) {//XS
+                size = "XS";
+            } else if (Waistgirth < 66 && Waistgirth > 60) {//S
+                size = "S";
+            } else if (Waistgirth < 69 && Waistgirth > 63) {//M
+                size = "M";
+            } else if (Waistgirth < 75 && Waistgirth > 69) {//L
+                size = "L";
+            } else if (Waistgirth > 75) {//XL
+                size = "XL";
+            }
+        } else if (Hipgirth > 100 && Hipgirth < 106) {//XL
+            if (Waistgirth < 63 && Waistgirth > 57) {//XS
+                size = "XS";
+            } else if (Waistgirth < 66 && Waistgirth > 60) {//S
+                size = "S";
+            } else if (Waistgirth < 69 && Waistgirth > 63) {//M
+                size = "M";
+            } else if (Waistgirth < 75 && Waistgirth > 69) {//L
+                size = "L";
+            } else if (Waistgirth > 75) {//XL
+                size = "XL";
+            }
+        }
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
+        databaseReference.child(firebaseUser.getUid()).child("lowersize").setValue(size);
+    }
+
+    private void womenuppersizedefine() {
+        String size = null;
+        if (Frontshoulderwidth > 35) {//XL
+            if (Bustgirth / 2 >= 39) {//XL
+                size = "XL";
+            } else if (Bustgirth / 2 < 39) {//L
+                size = "L";
+            }
+        } else if (Frontshoulderwidth < 35 && Frontshoulderwidth >= 33.5) {//L
+            if (Bustgirth / 2 >= 39) {//XL
+                size = "XL";
+            } else if (Bustgirth / 2 < 39 && Bustgirth / 2 >= 36) {//L
+                size = "L";
+            } else if (Bustgirth / 2 < 36) {//M
+                size = "L";
+            }
+        } else if (Frontshoulderwidth < 33.5 && Frontshoulderwidth >= 32.5) {//M
+            if (Bustgirth / 2 < 39 && Bustgirth / 2 >= 36) {//L
+                size = "L";
+            } else if (Bustgirth / 2 < 36 && Bustgirth / 2 >= 33.5) {//M
+                size = "M";
+            } else if (Bustgirth / 2 < 33.5) {//S
+                size = "M";
+            }
+        } else if (Frontshoulderwidth < 32.5 && Frontshoulderwidth >= 31.5) {//S
+            if (Bustgirth / 2 < 36 && Bustgirth / 2 >= 33.5) {//M
+                size = "M";
+            } else if (Bustgirth / 2 < 33.5 && Bustgirth / 2 >= 31) {//S
+                size = "S";
+            } else if (Bustgirth / 2 < 31) {//XS
+                size = "S";
+            }
+        } else if (Frontshoulderwidth < 31.5) {//XS
+            if (Bustgirth / 2 < 33.5 && Bustgirth / 2 >= 31) {//S
+                size = "S";
+            } else if (Bustgirth / 2 < 31) {//XS
+                size = "XS";
+            }
+        }
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
+        databaseReference.child(firebaseUser.getUid()).child("uppersize").setValue(size);
+    }
+
+    private void menlowersizedefine() {
+        String size = null;
+        if (Waistgirth > 66 && Waistgirth < 72) {//XS
+            size = "XS";
+        } else if (Waistgirth > 68 && Waistgirth < 76) {//S
+            size = "S";
+        } else if (Waistgirth > 76 && Waistgirth < 84) {//M
+            size = "M";
+        } else if (Waistgirth > 84 && Waistgirth < 92) {//L
+            size = "L";
+        } else if (Waistgirth > 92) {//XL
+            size = "XL";
+        }
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
+        databaseReference.child(firebaseUser.getUid()).child("lowersize").setValue(size);
+    }
+
+    private void menuppersizedefine() {
+        String size = null;
+        if (Frontshoulderwidth > 54) {//XL
+            if (Bustgirth / 2 >= 60) {//XL
+                size = "XL";
+            } else if (Bustgirth / 2 < 60) {//L
+                size = "L";
+            }
+        } else if (Frontshoulderwidth < 54 && Frontshoulderwidth >= 52.5) {//L
+            if (Bustgirth / 2 >= 60) {//XL
+                size = "XL";
+            } else if (Bustgirth / 2 < 60 && Bustgirth / 2 >= 57) {//L
+                size = "L";
+            } else if (Bustgirth / 2 < 57) {//M
+                size = "L";
+            }
+        } else if (Frontshoulderwidth < 52.5 && Frontshoulderwidth >= 51) {//M
+            if (Bustgirth / 2 < 60 && Bustgirth / 2 >= 57) {//L
+                size = "L";
+            } else if (Bustgirth / 2 < 57 && Bustgirth / 2 >= 54) {//M
+                size = "M";
+            } else if (Bustgirth / 2 < 54) {//S
+                size = "M";
+            }
+        } else if (Frontshoulderwidth < 51 && Frontshoulderwidth >= 49.5) {//S
+            if (Bustgirth / 2 < 57 && Bustgirth / 2 >= 54) {//M
+                size = "M";
+            } else if (Bustgirth / 2 < 54 && Bustgirth / 2 >= 51) {//S
+                size = "S";
+            } else if (Bustgirth / 2 < 51) {//XS
+                size = "S";
+            }
+        } else if (Frontshoulderwidth < 49.5) {//XS
+            if (Bustgirth / 2 < 54 && Bustgirth / 2 >= 51) {//S
+                size = "S";
+            } else if (Bustgirth / 2 < 51) {//XS
+                size = "XS";
+            }
+        }
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
+        databaseReference.child(firebaseUser.getUid()).child("uppersize").setValue(size);
+    }
+
     private void frontparams(JSONObject frontparams) {
         try {
             txt_Insidelegheight.setText(frontparams.getString("inseam") + "cm");
             txt_Necktoupperhiplength.setText(frontparams.getString("body_height") + "cm");
             txt_Frontshoulderwidth.setText(frontparams.getString("shoulders") + "cm");
+            Frontshoulderwidth = Double.parseDouble(frontparams.getString("shoulders"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -220,17 +420,17 @@ public class MeasureFragment extends Fragment {
         try {
             txt_Upperhipgirth.setText(volumeparams.getString("hips") + "cm");
             txt_Bustgirth.setText(volumeparams.getString("chest") + "cm");
+            Bustgirth = Double.parseDouble(volumeparams.getString("chest"));
             txt_Waistgirth.setText(volumeparams.getString("waist") + "cm");
+            Waistgirth = Double.parseDouble(volumeparams.getString("waist"));
             txt_Hipgirth.setText(volumeparams.getString("low_hips") + "cm");
+            Hipgirth = Double.parseDouble(volumeparams.getString("low_hips"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
     private void getdata() {
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
-        firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference().child("Users");
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -246,10 +446,12 @@ public class MeasureFragment extends Fragment {
                         weight = profile.getWeight();
                         id = profile.getId();
                         if (id.equals("")) {
-                            put();
+                            //put();
                         } else {
                             get();
                         }
+                        txt_uppersize.setText(profile.getUppersize());
+                        txt_lowersize.setText(profile.getLowersize());
                     }
                 }
             }
@@ -262,7 +464,7 @@ public class MeasureFragment extends Fragment {
         databaseReference.keepSynced(true);
     }
 
-    public String convertUrlToBase64(String url) {
+    private String convertUrlToBase64(String url) {
         URL newurl;
         Bitmap bitmap;
         String base64 = "";
@@ -291,7 +493,7 @@ public class MeasureFragment extends Fragment {
         editor.apply();
     }
 
-    public void LoadLocale() {
+    private void LoadLocale() {
         SharedPreferences preferences = getActivity().getSharedPreferences("Setting", MODE_PRIVATE);
         String language = preferences.getString("My_Lang", "");
         setLocale(language);

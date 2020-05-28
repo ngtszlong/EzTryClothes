@@ -9,9 +9,7 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -23,7 +21,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,16 +73,13 @@ public class ProfileFragment extends Fragment {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     private static ArrayList<Profile> profileArrayList;
-    private DatePickerDialog.OnDateSetListener dateSetListener;
-    String gender;
-    String action;
-    String front;
-    String side;
-    RadioGroup rg_gender;
-    RadioButton rb_male;
-    RadioButton rb_female;
-    TextView txt_help;
-    ProgressDialog progressDialog;
+    private String gender;
+    private String action;
+    private String front;
+    private String side;
+    private RadioButton rb_male;
+    private RadioButton rb_female;
+    private ProgressDialog progressDialog;
 
     @Nullable
     @Override
@@ -102,10 +96,9 @@ public class ProfileFragment extends Fragment {
         edt_weight = view.findViewById(R.id.edt_mpro_weight);
         txt_birth = view.findViewById(R.id.txt_mpro_birth);
         edt_address = view.findViewById(R.id.edt_mpro_address);
-        rg_gender = view.findViewById(R.id.rg_mpro_gender);
         rb_male = view.findViewById(R.id.rb_mpro_male);
         rb_female = view.findViewById(R.id.rb_mpro_female);
-        txt_help = view.findViewById(R.id.txt_howtotakephoto);
+        TextView txt_help = view.findViewById(R.id.txt_howtotakephoto);
         CardView btn_update = view.findViewById(R.id.btn_mpro_update);
         getdata();
 
@@ -119,11 +112,11 @@ public class ProfileFragment extends Fragment {
         btn_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Integer.parseInt(edt_height.getText().toString()) < 150){
+                if (Integer.parseInt(edt_height.getText().toString()) < 150) {
                     edt_height.setError("The minimum height is 150cm");
-                }else if (Integer.parseInt(edt_height.getText().toString()) > 200){
+                } else if (Integer.parseInt(edt_height.getText().toString()) > 200) {
                     edt_height.setError("The maximum height is 200cm");
-                }else{
+                } else {
                     updatedata();
                 }
             }
@@ -145,10 +138,10 @@ public class ProfileFragment extends Fragment {
         edt_height.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!edt_height.equals("")){
-                    if (Integer.parseInt(edt_height.getText().toString()) < 150){
+                if (!edt_height.equals("")) {
+                    if (Integer.parseInt(edt_height.getText().toString()) < 150) {
                         edt_height.setError("The minimum height is 150cm");
-                    }else if (Integer.parseInt(edt_height.getText().toString()) > 200){
+                    } else if (Integer.parseInt(edt_height.getText().toString()) > 200) {
                         edt_height.setError("The maximum height is 200cm");
                     }
                 }
@@ -265,17 +258,17 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    public void handlefrontclick(View view) {
+    private void handlefrontclick(View view) {
         action = "front";
         alertdialog();
     }
 
-    public void handlesideclick(View view) {
+    private void handlesideclick(View view) {
         action = "side";
         alertdialog();
     }
 
-    public void alertdialog() {
+    private void alertdialog() {
         final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Add Photo!");
@@ -302,59 +295,57 @@ public class ProfileFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
-            switch (resultCode) {
-                case RESULT_OK:
-                    progressDialog.show();
-                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                    handleUpload(bitmap);
-                    if (action.equals("front")){
-                        img_front.setImageBitmap(bitmap);
-                    }else if (action.equals("side")){
-                        img_side.setImageBitmap(bitmap);
-                    }
+            if (resultCode == RESULT_OK) {
+                progressDialog.show();
+                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                handleUpload(bitmap);
+                if (action.equals("front")) {
+                    img_front.setImageBitmap(bitmap);
+                } else if (action.equals("side")) {
+                    img_side.setImageBitmap(bitmap);
+                }
             }
         } else if (requestCode == 2) {
-            switch (resultCode) {
-                case RESULT_OK:
-                    Uri selectedImage = data.getData();
-                    try {
-                        String[] orientationColumn = {MediaStore.Images.Media.ORIENTATION};
-                        Cursor cur = getActivity().managedQuery(selectedImage, orientationColumn, null, null, null);
-                        int orientation = -1;
-                        if (cur != null && cur.moveToFirst()) {
-                            orientation = cur.getInt(cur.getColumnIndex(orientationColumn[0]));
-                        }
-                        InputStream imageStream = getActivity().getContentResolver().openInputStream(selectedImage);
-                        Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
-                        switch(orientation) {
-                            case 90:
-                                bitmap = rotateImage(bitmap, 90);
-                                break;
-                            case 180:
-                                bitmap = rotateImage(bitmap, 180);
-                                break;
-                            case 270:
-                                bitmap = rotateImage(bitmap, 270);
-                                break;
-                            default:
-                                break;
-                        }
-                        progressDialog.show();
-                        handleUpload(bitmap);
-                        if (action.equals("front")){
-                            img_front.setImageBitmap(bitmap);
-                            databaseReference.child(firebaseUser.getUid()).child("front").setValue(front);
-                        }else if (action.equals("side")){
-                            img_side.setImageBitmap(bitmap);
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
+            if (resultCode == RESULT_OK) {
+                Uri selectedImage = data.getData();
+                try {
+                    String[] orientationColumn = {MediaStore.Images.Media.ORIENTATION};
+                    Cursor cur = getActivity().managedQuery(selectedImage, orientationColumn, null, null, null);
+                    int orientation = -1;
+                    if (cur != null && cur.moveToFirst()) {
+                        orientation = cur.getInt(cur.getColumnIndex(orientationColumn[0]));
                     }
+                    InputStream imageStream = getActivity().getContentResolver().openInputStream(selectedImage);
+                    Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
+                    switch (orientation) {
+                        case 90:
+                            bitmap = rotateImage(bitmap, 90);
+                            break;
+                        case 180:
+                            bitmap = rotateImage(bitmap, 180);
+                            break;
+                        case 270:
+                            bitmap = rotateImage(bitmap, 270);
+                            break;
+                        default:
+                            break;
+                    }
+                    progressDialog.show();
+                    handleUpload(bitmap);
+                    if (action.equals("front")) {
+                        img_front.setImageBitmap(bitmap);
+                        databaseReference.child(firebaseUser.getUid()).child("front").setValue(front);
+                    } else if (action.equals("side")) {
+                        img_side.setImageBitmap(bitmap);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
-    public static Bitmap rotateImage(Bitmap source, float angle) {
+    private static Bitmap rotateImage(Bitmap source, float angle) {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix,
@@ -416,7 +407,7 @@ public class ProfileFragment extends Fragment {
         editor.apply();
     }
 
-    public void LoadLocale() {
+    private void LoadLocale() {
         SharedPreferences preferences = getActivity().getSharedPreferences("Setting", MODE_PRIVATE);
         String language = preferences.getString("My_Lang", "");
         setLocale(language);

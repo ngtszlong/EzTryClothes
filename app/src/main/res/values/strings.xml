@@ -112,4 +112,16 @@
     <string name="SizeGuide">Size Guide</string>
     <string name="Pleasewait">Loading, Please wait...</string>
     <string name="size">Size :</string>
+    <string name="suggesrupper">Suggestion upper clothes size:</string>
+    <string name="suggestlower">Suggestion lower clothes size:</string>
+    <string name="shoppingCartempty">Your shopping Cart is empty</string>
+    <string name="noclothes">You have not choose any clothes</string>
+    <string name="outofstock">This item is out of stock</string>
+    <string name="question_order">\nAre you sure continue order?(The item above cannot buy now)</string>
+    <string name="Yes">Yes</string>
+    <string name="buynexttime">No, i buy when it have stock</string>
+    <string name="Hips">Hips</string>
+    <string name="Mensbottomsizechart">Men\'s bottom size chart</string>
+    <string name="Womensbottomsizechart">Women\'s bottom size chart</string>
+    <string name="ShoulderWidth">Shoulder Width</string>
 </resources>

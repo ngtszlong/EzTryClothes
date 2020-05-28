@@ -3,31 +3,21 @@ package com.ngtszlong.eztrycloth.menu;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatDrawableManager;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.ngtszlong.eztrycloth.R;
-import com.ngtszlong.eztrycloth.menu.list.ListItem;
 import com.ngtszlong.eztrycloth.menu.list.ListItemActivity;
 
 import java.util.ArrayList;
@@ -38,15 +28,13 @@ import static android.content.Context.MODE_PRIVATE;
 public class MenuFragment extends Fragment implements MenuAdapter.OnItemClickListener {
 
     private RecyclerView recyclerView;
-    private MenuAdapter menuAdapter;
-    public static ArrayList<MenuItem> menuItems;
+    private static ArrayList<MenuItem> menuItems;
 
-    RadioButton rb_all;
-    RadioButton rb_men;
-    RadioButton rb_women;
-    RadioGroup rg_type;
+    private RadioButton rb_all;
+    private RadioButton rb_men;
+    private RadioButton rb_women;
 
-    String[] type;
+    private String[] type;
 
     @Nullable
     @Override
@@ -61,7 +49,7 @@ public class MenuFragment extends Fragment implements MenuAdapter.OnItemClickLis
         rb_all = view.findViewById(R.id.rb_all);
         rb_men = view.findViewById(R.id.rb_men);
         rb_women = view.findViewById(R.id.rb_women);
-        rg_type = view.findViewById(R.id.rg_type);
+        RadioGroup rg_type = view.findViewById(R.id.rg_type);
 
         type = getResources().getStringArray(R.array.type);
         check(type);
@@ -105,7 +93,7 @@ public class MenuFragment extends Fragment implements MenuAdapter.OnItemClickLis
             }
         }
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-        menuAdapter = new MenuAdapter(getActivity(), menuItems);
+        MenuAdapter menuAdapter = new MenuAdapter(getActivity(), menuItems);
         recyclerView.setAdapter(menuAdapter);
         menuAdapter.setOnItemClickListener(MenuFragment.this);
     }

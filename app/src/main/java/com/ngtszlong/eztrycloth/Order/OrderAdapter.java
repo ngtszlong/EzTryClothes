@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> {
     private Context context;
     private ArrayList<Order> orderArrayList;
-    double Total = 0;
+    private double Total = 0;
 
     public OrderAdapter(Context context, ArrayList<Order> orderArrayList) {
         this.context = context;

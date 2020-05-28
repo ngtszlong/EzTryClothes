@@ -1,34 +1,32 @@
 package com.ngtszlong.eztrycloth.menu.detail;
 
 public class Detail {
-    String No;
-    String Company;
-    String Name_Chi;
-    String Name_Eng;
-    String Gender;
-    String Type;
-    String Color_Chi;
-    String Color_Eng;
-    int Thumbnail;
-    String XXL;
-    String XL;
-    String L;
-    String M;
-    String S;
-    String XS;
-    String XXS;
-    String Description_Chi;
-    String Description_Eng;
-    String Material_Chi;
-    String Material_Eng;
-    String Quantity;
-    String Price;
-    String Discount;
+    private String No;
+    private String Company;
+    private String Name_Chi;
+    private String Name_Eng;
+    private String Gender;
+    private String Type;
+    private String Color_Chi;
+    private String Color_Eng;
+    private int Thumbnail;
+    private String XL;
+    private String L;
+    private String M;
+    private String S;
+    private String XS;
+    private String Description_Chi;
+    private String Description_Eng;
+    private String Material_Chi;
+    private String Material_Eng;
+    private String Quantity;
+    private String Price;
+    private String Discount;
 
     public Detail() {
     }
 
-    public Detail(String no, String company, String name_Chi, String name_Eng, String gender, String type, String color_Chi, String color_Eng, int thumbnail, String XXL, String XL, String l, String m, String s, String XS, String XXS, String description_Chi, String description_Eng, String material_Chi, String material_Eng, String quantity, String price, String discount) {
+    public Detail(String no, String company, String name_Chi, String name_Eng, String gender, String type, String color_Chi, String color_Eng, int thumbnail, String XL, String l, String m, String s, String XS, String description_Chi, String description_Eng, String material_Chi, String material_Eng, String quantity, String price, String discount) {
         No = no;
         Company = company;
         Name_Chi = name_Chi;
@@ -38,13 +36,11 @@ public class Detail {
         Color_Chi = color_Chi;
         Color_Eng = color_Eng;
         Thumbnail = thumbnail;
-        this.XXL = XXL;
         this.XL = XL;
         L = l;
         M = m;
         S = s;
         this.XS = XS;
-        this.XXS = XXS;
         Description_Chi = description_Chi;
         Description_Eng = description_Eng;
         Material_Chi = material_Chi;
@@ -126,14 +122,6 @@ public class Detail {
         Thumbnail = thumbnail;
     }
 
-    public String getXXL() {
-        return XXL;
-    }
-
-    public void setXXL(String XXL) {
-        this.XXL = XXL;
-    }
-
     public String getXL() {
         return XL;
     }
@@ -172,14 +160,6 @@ public class Detail {
 
     public void setXS(String XS) {
         this.XS = XS;
-    }
-
-    public String getXXS() {
-        return XXS;
-    }
-
-    public void setXXS(String XXS) {
-        this.XXS = XXS;
     }
 
     public String getDescription_Chi() {

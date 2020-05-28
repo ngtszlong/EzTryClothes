@@ -89,6 +89,8 @@ public class RegisterFragment extends Fragment {
                                 profile.setSide("");
                                 profile.setWeight("40");
                                 profile.setId("");
+                                profile.setUppersize("");
+                                profile.setLowersize("");
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 DatabaseReference reference = database.getReference("Users");
                                 reference.child(uid).setValue(profile);

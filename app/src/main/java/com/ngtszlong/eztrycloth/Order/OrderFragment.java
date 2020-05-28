@@ -9,11 +9,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,17 +28,9 @@ import java.util.Locale;
 import static android.content.Context.MODE_PRIVATE;
 
 public class OrderFragment extends Fragment {
-    public static ArrayList<Order> orderArrayList;
-    public static ArrayList<Order> orders;
-    OrderAdapter orderAdapter;
-    RecyclerView recyclerView;
-    TextView txt_date;
-    TextView txt_price;
-    TextView txt_address;
-    TextView date;
-    TextView total;
-    TextView address;
-    DatabaseReference databaseReference;
+    private static ArrayList<Order> orderArrayList;
+    private OrderAdapter orderAdapter;
+    private RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,7 +44,7 @@ public class OrderFragment extends Fragment {
 
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference().child("PurchaseOrder").child(firebaseUser.getUid());
+        DatabaseReference databaseReference = firebaseDatabase.getReference().child("PurchaseOrder").child(firebaseUser.getUid());
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

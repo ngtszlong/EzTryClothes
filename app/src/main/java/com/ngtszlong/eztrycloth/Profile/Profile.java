@@ -14,11 +14,13 @@ public class Profile {
     private String side;
     private String weight;
     private String id;
+    private String uppersize;
+    private String lowersize;
 
     public Profile() {
     }
 
-    public Profile(String email, String uid, String name, String gender, String age, String height, String birth, String address, String phone, String front, String side, String weight, String id) {
+    public Profile(String email, String uid, String name, String gender, String age, String height, String birth, String address, String phone, String front, String side, String weight, String id, String uppersize, String lowersize) {
         this.email = email;
         this.uid = uid;
         this.name = name;
@@ -32,6 +34,24 @@ public class Profile {
         this.side = side;
         this.weight = weight;
         this.id = id;
+        this.uppersize = uppersize;
+        this.lowersize = lowersize;
+    }
+
+    public String getUppersize() {
+        return uppersize;
+    }
+
+    public void setUppersize(String uppersize) {
+        this.uppersize = uppersize;
+    }
+
+    public String getLowersize() {
+        return lowersize;
+    }
+
+    public void setLowersize(String lowersize) {
+        this.lowersize = lowersize;
     }
 
     public String getPhone() {

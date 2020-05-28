@@ -1,15 +1,12 @@
 package com.ngtszlong.eztrycloth.menu.detail;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -189,31 +186,31 @@ public class DetailActivity extends AppCompatActivity {
         if (l.getXL().equals("Y")) {
             XL = "Y";
             stringBuilder.append("XL ");
-        }else{
+        } else {
             XL = "N";
         }
         if (l.getL().equals("Y")) {
             L = "Y";
             stringBuilder.append("L ");
-        }else{
-            L="N";
+        } else {
+            L = "N";
         }
         if (l.getM().equals("Y")) {
             M = "Y";
             stringBuilder.append("M ");
-        }else{
+        } else {
             M = "N";
         }
         if (l.getS().equals("Y")) {
             S = "Y";
             stringBuilder.append("S ");
-        }else{
+        } else {
             S = "N";
         }
         if (l.getXS().equals("Y")) {
             XS = "Y";
             stringBuilder.append("XS ");
-        }else{
+        } else {
             XS = "N";
         }
         size.setText(stringBuilder);

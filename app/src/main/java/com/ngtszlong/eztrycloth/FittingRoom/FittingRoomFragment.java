@@ -3,7 +3,6 @@ package com.ngtszlong.eztrycloth.FittingRoom;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Matrix;
-import android.graphics.Point;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,17 +10,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewManager;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -49,7 +43,6 @@ public class FittingRoomFragment extends Fragment implements TryAdapter.OnItemCl
     private DatabaseReference mRef;
     private ArrayList<ShoppingCart> shoppingCartArrayList;
     private TryAdapter tryAdapter;
-    private FirebaseAuth fAuth;
     private FirebaseUser user;
 
     private ViewGroup mainlayout;
@@ -63,7 +56,7 @@ public class FittingRoomFragment extends Fragment implements TryAdapter.OnItemCl
     private Matrix matrix = new Matrix();
     private Float scale = 1f;
     private ScaleGestureDetector SGD;
-    ImageView imageView;
+    private ImageView imageView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,7 +71,7 @@ public class FittingRoomFragment extends Fragment implements TryAdapter.OnItemCl
         relativeLayout = v.findViewById(R.id.rl_background);
         img_background = v.findViewById(R.id.img_background);
 
-        fAuth = FirebaseAuth.getInstance();
+        FirebaseAuth fAuth = FirebaseAuth.getInstance();
         user = fAuth.getCurrentUser();
         getImage();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -90,6 +83,9 @@ public class FittingRoomFragment extends Fragment implements TryAdapter.OnItemCl
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     ShoppingCart shoppingCart = dataSnapshot1.getValue(ShoppingCart.class);
                     shoppingCartArrayList.add(shoppingCart);
+                }
+                if (shoppingCartArrayList.size() == 0) {
+                    Toast.makeText(getContext(), R.string.noclothes, Toast.LENGTH_SHORT).show();
                 }
                 tryAdapter = new TryAdapter(getContext(), shoppingCartArrayList);
                 rv_clothes.setAdapter(tryAdapter);
@@ -118,7 +114,6 @@ public class FittingRoomFragment extends Fragment implements TryAdapter.OnItemCl
                     Profile profile = dataSnapshot1.getValue(Profile.class);
                     if (user.getUid().equals(profile.getUid())) {
                         Picasso.get().load(profile.getFront()).into(img_background);
-
                     }
                 }
             }

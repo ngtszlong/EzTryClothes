@@ -24,7 +24,7 @@ import com.ngtszlong.eztrycloth.R;
 
 public class LoginFragment extends Fragment {
     private FirebaseAuth fAuth;
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
