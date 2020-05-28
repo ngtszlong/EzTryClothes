@@ -106,4 +106,5 @@
     </string-array>
     <string name="SizeGuide">尺碼指南</string>
     <string name="Pleasewait">載入中, 請稍候...</string>
+    <string name="size">尺碼 :</string>
 </resources>

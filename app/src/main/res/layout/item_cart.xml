@@ -56,15 +56,18 @@
                         <TextView
                             android:id="@+id/shopcart_gender"
                             android:layout_width="wrap_content"
+                            android:textSize="17dp"
                             android:layout_height="wrap_content" />
 
                         <TextView
                             android:layout_width="wrap_content"
+                            android:textSize="17dp"
                             android:layout_height="wrap_content"
                             android:text=" | " />
 
                         <TextView
                             android:id="@+id/shopcart_name"
+                            android:textSize="17dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
                     </LinearLayout>
@@ -77,11 +80,13 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:textSize="17dp"
                             android:layout_width="wrap_content"
                             android:layout_height="23dp"
                             android:text="@string/Color" />
 
                         <TextView
+                            android:textSize="17dp"
                             android:id="@+id/shopcart_color"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
@@ -97,13 +102,35 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="$" />
+                            android:textSize="17dp"
+                            android:text="@string/ProductPrice" />
 
                         <TextView
                             android:id="@+id/shopcart_price"
+                            android:textSize="17dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="17dp"
+                            android:text="@string/size" />
+
+                        <Spinner
+                            android:id="@+id/spinner_size"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
                     </LinearLayout>
 
                     <com.cepheuen.elegantnumberbutton.view.ElegantNumberButton

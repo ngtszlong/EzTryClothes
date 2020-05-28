@@ -106,4 +106,5 @@
     </string-array>
     <string name="SizeGuide">Size Guide</string>
     <string name="Pleasewait">Loading, Please wait...</string>
+    <string name="size">Size :</string>
 </resources>

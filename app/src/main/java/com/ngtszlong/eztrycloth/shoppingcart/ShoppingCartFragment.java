@@ -46,7 +46,7 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference reference;
     private ArrayList<ShoppingCart> shoppingCartArrayList;
-    ArrayList<ListItem> listItemArrayList;
+    private ArrayList<ListItem> listItemArrayList;
     private ShoppingCartAdapter shoppingCartAdapter;
     private FirebaseAuth fAuth;
     private FirebaseUser user;
@@ -54,16 +54,16 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
 
     Order order;
 
-    SimpleDateFormat format;
-    Date date;
-    String str;
+    private SimpleDateFormat format;
+    private Date date;
+    private String str;
 
-    String address;
-    String name;
+    private String address;
+    private String name;
     double total = 0;
 
-    int quantity;
-    String stringquantity;
+    private int quantity;
+    private String stringquantity;
 
     @Nullable
     @Override

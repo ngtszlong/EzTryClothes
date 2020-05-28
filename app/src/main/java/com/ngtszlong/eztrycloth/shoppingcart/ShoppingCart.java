@@ -13,11 +13,18 @@ public class ShoppingCart {
     private String discount;
     private String tryimage;
     private String str;
+    private String XL;
+    private String L;
+    private String M;
+    private String S;
+    private String XS;
+    private String Size;
+
 
     public ShoppingCart() {
     }
 
-    public ShoppingCart(String companyuid, String uid, String no, String image, String gender, String name, String quantity, String color, String price, String discount, String tryimage, String str) {
+    public ShoppingCart(String companyuid, String uid, String no, String image, String gender, String name, String quantity, String color, String price, String discount, String tryimage, String str, String XL, String l, String m, String s, String XS, String size) {
         this.companyuid = companyuid;
         this.uid = uid;
         this.no = no;
@@ -30,6 +37,12 @@ public class ShoppingCart {
         this.discount = discount;
         this.tryimage = tryimage;
         this.str = str;
+        this.XL = XL;
+        L = l;
+        M = m;
+        S = s;
+        this.XS = XS;
+        Size = size;
     }
 
     public String getCompanyuid() {
@@ -126,5 +139,53 @@ public class ShoppingCart {
 
     public void setStr(String str) {
         this.str = str;
+    }
+
+    public String getXL() {
+        return XL;
+    }
+
+    public void setXL(String XL) {
+        this.XL = XL;
+    }
+
+    public String getL() {
+        return L;
+    }
+
+    public void setL(String l) {
+        L = l;
+    }
+
+    public String getM() {
+        return M;
+    }
+
+    public void setM(String m) {
+        M = m;
+    }
+
+    public String getS() {
+        return S;
+    }
+
+    public void setS(String s) {
+        S = s;
+    }
+
+    public String getXS() {
+        return XS;
+    }
+
+    public void setXS(String XS) {
+        this.XS = XS;
+    }
+
+    public String getSize() {
+        return Size;
+    }
+
+    public void setSize(String size) {
+        Size = size;
     }
 }

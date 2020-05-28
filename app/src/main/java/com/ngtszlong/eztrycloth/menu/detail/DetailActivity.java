@@ -60,6 +60,11 @@ public class DetailActivity extends AppCompatActivity {
     ShoppingCart shoppingCart;
 
     SharedPreferences preferences;
+    String XL;
+    String L;
+    String M;
+    String S;
+    String XS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +138,12 @@ public class DetailActivity extends AppCompatActivity {
                                 shoppingCart.setTryimage(imagetry);
                                 shoppingCart.setQuantity("1");
                                 shoppingCart.setStr(str);
+                                shoppingCart.setXL(XL);
+                                shoppingCart.setL(L);
+                                shoppingCart.setM(M);
+                                shoppingCart.setS(S);
+                                shoppingCart.setXS(XS);
+                                shoppingCart.setSize("");
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 DatabaseReference reference = database.getReference("ShoppingCart");
                                 reference.child(uid).child(str).setValue(shoppingCart);
@@ -145,7 +156,7 @@ public class DetailActivity extends AppCompatActivity {
 
                         }
                     });
-                }else{
+                } else {
                     Toast.makeText(DetailActivity.this, "You must login first", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -168,26 +179,59 @@ public class DetailActivity extends AppCompatActivity {
         TextView quantity = findViewById(R.id.detail_Quantity);
         TextView description = findViewById(R.id.detail_description);
         TextView material = findViewById(R.id.detail_material);
+        TextView size = findViewById(R.id.detail_size);
         if (!l.getImage().equals("")) {
             Picasso.get().load(l.getImage()).into(image);
         }
         price.setText(l.getPrice());
         quantity.setText(l.getQuantity());
-        if (language.equals("en")){
+        StringBuilder stringBuilder = new StringBuilder();
+        if (l.getXL().equals("Y")) {
+            XL = "Y";
+            stringBuilder.append("XL ");
+        }else{
+            XL = "N";
+        }
+        if (l.getL().equals("Y")) {
+            L = "Y";
+            stringBuilder.append("L ");
+        }else{
+            L="N";
+        }
+        if (l.getM().equals("Y")) {
+            M = "Y";
+            stringBuilder.append("M ");
+        }else{
+            M = "N";
+        }
+        if (l.getS().equals("Y")) {
+            S = "Y";
+            stringBuilder.append("S ");
+        }else{
+            S = "N";
+        }
+        if (l.getXS().equals("Y")) {
+            XS = "Y";
+            stringBuilder.append("XS ");
+        }else{
+            XS = "N";
+        }
+        size.setText(stringBuilder);
+        if (language.equals("en")) {
             name.setText(l.getName_Eng());
             gender.setText(l.getGender());
             color.setText(l.getColor_Eng());
             description.setText(l.getDescription_Eng());
             material.setText(l.getMaterial_Eng());
             getSupportActionBar().setTitle(l.getName_Eng());
-        }else if (language.equals("zh")) {
+        } else if (language.equals("zh")) {
             name.setText(l.getName_Chi());
             color.setText(l.getColor_Chi());
             description.setText(l.getDescription_Chi());
             material.setText(l.getMaterial_Chi());
             if (l.getGender().equals("MEN")) {
                 gender.setText("男裝");
-            }else if (l.getGender().equals("WOMEN")) {
+            } else if (l.getGender().equals("WOMEN")) {
                 gender.setText("女裝");
             }
             getSupportActionBar().setTitle(l.getName_Chi());

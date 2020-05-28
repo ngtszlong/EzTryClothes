@@ -4,8 +4,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,9 +20,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.ngtszlong.eztrycloth.R;
+import com.ngtszlong.eztrycloth.menu.list.ListItem;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapter.ViewHolder> {
     private Context context;
@@ -39,12 +44,54 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         final ShoppingCart shoppingCart = shoppingCartArrayList.get(position);
         holder.gender.setText(shoppingCart.getGender());
         holder.name.setText(shoppingCart.getName());
         holder.color.setText(shoppingCart.getColor());
         holder.price.setText(shoppingCart.getPrice());
+        ArrayList<String> array = new ArrayList<>();
+        if (shoppingCart.getXL().equals("Y")) {
+            array.add("XL");
+        }
+        if (shoppingCart.getL().equals("Y")) {
+            array.add("L");
+        }
+        if (shoppingCart.getM().equals("Y")) {
+            array.add("M");
+        }
+        if (shoppingCart.getS().equals("Y")) {
+            array.add("S");
+        }
+        if (shoppingCart.getXS().equals("Y")) {
+            array.add("XS");
+        }
+        ArrayAdapter<String> nAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, array);
+        nAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        holder.spinner.setAdapter(nAdapter);
+        int index = 0;
+        for (int i = 0; i < holder.spinner.getCount(); i++) {
+            if (holder.spinner.getItemAtPosition(i).equals(shoppingCart.getSize())) {
+                index = i;
+            }
+        }
+        holder.spinner.setSelection(index);
+        holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                shoppingCart.setSize(holder.spinner.getSelectedItem().toString());
+                FirebaseAuth fAuth = FirebaseAuth.getInstance();
+                FirebaseUser user = fAuth.getCurrentUser();
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference reference = database.getReference("ShoppingCart");
+                reference.child(user.getUid()).child(shoppingCart.getStr()).setValue(shoppingCart);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         if (!shoppingCart.getImage().equals("")) {
             Picasso.get().load(shoppingCart.getImage()).into(holder.image);
         }
@@ -92,6 +139,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         TextView price;
         ElegantNumberButton elegantNumberButton;
         ImageButton imageButton;
+        Spinner spinner;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -101,6 +149,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
             color = itemView.findViewById(R.id.shopcart_color);
             price = itemView.findViewById(R.id.shopcart_price);
             imageButton = itemView.findViewById(R.id.shopcart_delete);
+            spinner = itemView.findViewById(R.id.spinner_size);
             elegantNumberButton = itemView.findViewById(R.id.txt_count);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
