@@ -54,6 +54,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         if (!order.getImage().equals("")) {
             Picasso.get().load(order.getImage()).into(holder.img_order_image);
         }
+        holder.size.setText(order.getSize());
         holder.txt_order_name.setText(order.getName());
         holder.txt_order_itemprice.setText(order.getPrice());
         holder.quantity.setText(order.getQuantity());
@@ -75,6 +76,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         TextView total;
         TextView address;
         TextView quantity;
+        TextView size;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -84,6 +86,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             img_order_image = itemView.findViewById(R.id.img_order_image);
             txt_order_name = itemView.findViewById(R.id.txt_order_name);
             txt_order_itemprice = itemView.findViewById(R.id.txt_order_itemprice);
+            size = itemView.findViewById(R.id.txt_order_size);
             date = itemView.findViewById(R.id.txt_date);
             total = itemView.findViewById(R.id.txt_total);
             address = itemView.findViewById(R.id.txt_address);

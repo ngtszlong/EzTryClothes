@@ -156,21 +156,24 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
                         }
                     }
                 }
+                if (!message.toString().equals("")){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("This item is out of stock")
+                            .setMessage(message + "\nAre you sure continue order?(The item above cannot buy now)")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    yesaction();
+                                }
+                            }).setNegativeButton("No, i buy when it have stock", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("This item is out of stock")
-                        .setMessage(message + "\nAre you sure continue order?(The item above cannot buy now)")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                yesaction();
-                            }
-                        }).setNegativeButton("No, i buy when it have stock", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                }).show();
+                        }
+                    }).show();
+                }else {
+                    yesaction();
+                }
             }
         });
 
@@ -193,6 +196,7 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
                 order.setPrice(shoppingCartArrayList.get(i).getPrice());
                 order.setQuantity(shoppingCartArrayList.get(i).getQuantity());
                 order.setNo(shoppingCartArrayList.get(i).getNo());
+                order.setSize(shoppingCartArrayList.get(i).getSize());
                 total = total + Double.parseDouble(shoppingCartArrayList.get(i).getPrice()) * Double.parseDouble(shoppingCartArrayList.get(i).getQuantity());
                 order.setAddress(address);
                 order.setCustomername(name);
