@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -58,10 +59,14 @@ public class DetailActivity extends AppCompatActivity {
 
     ShoppingCart shoppingCart;
 
+    SharedPreferences preferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        preferences = getSharedPreferences("Setting", MODE_PRIVATE);
 
         toolbar = findViewById(R.id.tb_detail);
         setSupportActionBar(toolbar);
@@ -154,6 +159,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void putdata(ListItem l) {
+        String language = preferences.getString("My_Lang", "");
         ImageView image = findViewById(R.id.detail_image);
         TextView name = findViewById(R.id.detail_name);
         TextView gender = findViewById(R.id.detail_gender);
@@ -165,14 +171,27 @@ public class DetailActivity extends AppCompatActivity {
         if (!l.getImage().equals("")) {
             Picasso.get().load(l.getImage()).into(image);
         }
-        name.setText(l.getName_Eng());
-        gender.setText(l.getGender());
-        color.setText(l.getColor_Eng());
         price.setText(l.getPrice());
         quantity.setText(l.getQuantity());
-        description.setText(l.getDescription_Eng());
-        material.setText(l.getMaterial_Eng());
-        getSupportActionBar().setTitle(l.getName_Eng());
+        if (language.equals("en")){
+            name.setText(l.getName_Eng());
+            gender.setText(l.getGender());
+            color.setText(l.getColor_Eng());
+            description.setText(l.getDescription_Eng());
+            material.setText(l.getMaterial_Eng());
+            getSupportActionBar().setTitle(l.getName_Eng());
+        }else if (language.equals("zh")) {
+            name.setText(l.getName_Chi());
+            color.setText(l.getColor_Chi());
+            description.setText(l.getDescription_Chi());
+            material.setText(l.getMaterial_Chi());
+            if (l.getGender().equals("MEN")) {
+                gender.setText("男裝");
+            }else if (l.getGender().equals("WOMEN")) {
+                gender.setText("女裝");
+            }
+            getSupportActionBar().setTitle(l.getName_Chi());
+        }
     }
 
     public void setfirebasedata(ListItem l) {

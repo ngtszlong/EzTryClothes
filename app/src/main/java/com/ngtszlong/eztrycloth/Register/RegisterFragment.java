@@ -33,8 +33,7 @@ public class RegisterFragment extends Fragment {
     Profile profile;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_register, container, false);
         getActivity().setTitle(getText(R.string.register));
 

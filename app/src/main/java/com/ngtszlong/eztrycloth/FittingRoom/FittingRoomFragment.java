@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -20,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.ViewManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -165,6 +167,7 @@ public class FittingRoomFragment extends Fragment implements TryAdapter.OnItemCl
     public void onItemClick(int position) {
         ShoppingCart shoppingCart = shoppingCartArrayList.get(position);
         imageView = new ImageView(getContext());
+        imageView.setTag(shoppingCart.getNo());
         Picasso.get().load(shoppingCart.getTryimage()).resize(500, 666).into(imageView);
         imageView.setOnTouchListener(onTouchListener());
         imageView.setLayoutParams(new RelativeLayout.LayoutParams(700, 700));
