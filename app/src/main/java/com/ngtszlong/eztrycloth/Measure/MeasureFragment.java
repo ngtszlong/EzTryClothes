@@ -165,7 +165,7 @@ public class MeasureFragment extends Fragment {
                 firebaseDatabase = FirebaseDatabase.getInstance();
                 databaseReference = firebaseDatabase.getReference().child("Users");
                 databaseReference.child(firebaseUser.getUid()).child("id").setValue(id);
-                get();
+                Toast.makeText(getContext(), R.string.PleaseRestartthepage, Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
             }
         }, new Response.ErrorListener() {
@@ -199,11 +199,13 @@ public class MeasureFragment extends Fragment {
                 try {
                     Log.d("Response", String.valueOf(response));
                     JSONObject volumeparams = response.getJSONObject("volume_params");
+                    Log.d("Response", String.valueOf(volumeparams));
                     for (int x = 0; x < volumeparams.length(); x++) {
                         volumeparams(volumeparams);
                     }
                     JSONObject frontparams = response.getJSONObject("front_params");
                     for (int y = 0; y < frontparams.length(); y++) {
+                        Log.d("Response", String.valueOf(frontparams));
                         frontparams(frontparams);
                     }
                     if (gender.equals("Male")) {
@@ -407,7 +409,7 @@ public class MeasureFragment extends Fragment {
 
     private void frontparams(JSONObject frontparams) {
         try {
-            txt_Insidelegheight.setText(frontparams.getString("inseam") + "cm");
+            txt_Insidelegheight.setText(frontparams.getString("inside_leg_height") + "cm");
             txt_Necktoupperhiplength.setText(frontparams.getString("body_height") + "cm");
             txt_Frontshoulderwidth.setText(frontparams.getString("shoulders") + "cm");
             Frontshoulderwidth = Double.parseDouble(frontparams.getString("shoulders"));
@@ -418,9 +420,9 @@ public class MeasureFragment extends Fragment {
 
     private void volumeparams(JSONObject volumeparams) {
         try {
-            txt_Upperhipgirth.setText(volumeparams.getString("hips") + "cm");
+            txt_Upperhipgirth.setText(volumeparams.getString("high_hips") + "cm");
             txt_Bustgirth.setText(volumeparams.getString("chest") + "cm");
-            Bustgirth = Double.parseDouble(volumeparams.getString("chest"));
+            Bustgirth = Double.parseDouble(volumeparams.getString("under_bust_girth"));
             txt_Waistgirth.setText(volumeparams.getString("waist") + "cm");
             Waistgirth = Double.parseDouble(volumeparams.getString("waist"));
             txt_Hipgirth.setText(volumeparams.getString("low_hips") + "cm");
@@ -446,7 +448,7 @@ public class MeasureFragment extends Fragment {
                         weight = profile.getWeight();
                         id = profile.getId();
                         if (id.equals("")) {
-                            //put();
+                            put();
                         } else {
                             get();
                         }

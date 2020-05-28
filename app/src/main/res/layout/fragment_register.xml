@@ -28,7 +28,6 @@
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
-        android:text="ngtszlong2@yahoo.com.hk"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
         android:textSize="16dp" />
@@ -45,7 +44,6 @@
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
-        android:text="87156215"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
         android:textSize="16dp" />
@@ -63,7 +61,6 @@
         android:ems="10"
         android:hint="Confirm Password"
         android:inputType="textPassword"
-        android:text="87156215"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF" />
 

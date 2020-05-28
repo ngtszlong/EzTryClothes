@@ -119,4 +119,5 @@
     <string name="Mensbottomsizechart">男子下裝尺碼表</string>
     <string name="Womensbottomsizechart">女子下裝尺碼表</string>
     <string name="ShoulderWidth">肩寬</string>
+    <string name="PleaseRestartthepage">請重新啟動頁面</string>
 </resources>
