@@ -9,13 +9,12 @@ public class Order {
     private String quantity;
     private String price;
     private String discount;
-    private String str;
     private String date;
     private String address;
     private String customername;
     private String Size;
 
-    public Order(String companyuid, String uid, String no, String image, String name, String quantity, String price, String discount, String str, String date, String address, String customername, String size) {
+    public Order(String companyuid, String uid, String no, String image, String name, String quantity, String price, String discount, String date, String address, String customername, String size) {
         this.companyuid = companyuid;
         this.uid = uid;
         this.no = no;
@@ -24,7 +23,6 @@ public class Order {
         this.quantity = quantity;
         this.price = price;
         this.discount = discount;
-        this.str = str;
         this.date = date;
         this.address = address;
         this.customername = customername;
@@ -96,14 +94,6 @@ public class Order {
 
     public void setDiscount(String discount) {
         this.discount = discount;
-    }
-
-    public String getStr() {
-        return str;
-    }
-
-    public void setStr(String str) {
-        this.str = str;
     }
 
     public String getDate() {

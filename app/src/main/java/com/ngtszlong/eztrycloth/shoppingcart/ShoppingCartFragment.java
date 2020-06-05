@@ -220,7 +220,6 @@ public class ShoppingCartFragment extends Fragment implements ShoppingCartAdapte
                 order.setDate(str);
                 order.setDiscount(shoppingCartArrayList.get(i).getDiscount());
                 order.setUid(shoppingCartArrayList.get(i).getUid());
-                order.setStr(shoppingCartArrayList.get(i).getStr());
                 order.setName(shoppingCartArrayList.get(i).getName());
                 order.setImage(shoppingCartArrayList.get(i).getImage());
                 order.setPrice(shoppingCartArrayList.get(i).getPrice());
