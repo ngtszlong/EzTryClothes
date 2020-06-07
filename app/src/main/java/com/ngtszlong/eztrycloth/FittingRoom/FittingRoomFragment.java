@@ -113,7 +113,11 @@ public class FittingRoomFragment extends Fragment implements TryAdapter.OnItemCl
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     Profile profile = dataSnapshot1.getValue(Profile.class);
                     if (user.getUid().equals(profile.getUid())) {
-                        Picasso.get().load(profile.getFront()).into(img_background);
+                        if (!profile.getFront().equals("")){
+                            Picasso.get().load(profile.getFront()).into(img_background);
+                        }else{
+                            Toast.makeText(getContext(), "You need to upload the front photo first", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             }
